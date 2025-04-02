@@ -2,7 +2,7 @@
 
 ################################################################
 
-##DO NOT USE NOT OUR CODE##
+##DO NOT USE, NOT OUR CODE##
 
 import rospy
 from std_msgs.msg import String,Bool,Int32

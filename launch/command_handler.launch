@@ -25,11 +25,11 @@
 <!-- HANDLING COMMANDS -->
 
 <!-- <node name="command_activation" pkg="command_handler" type="command_activation.py" /> -->
-<node name="command_recognition" pkg="command_handler" type="command_recognition.py" output = "screen"/>
+<node name="command_recognition" pkg="cogbiogroup9" type="command_recognition.py" output = "screen"/>
 
-<!-- ACTIONS -->
-<include file="$(find actions)/launch/actions.launch" />
+<!-- ACTIONS: WE NEED TO IMPLEMENT THIS --> 
+<!-- <include file="$(find actions)/launch/actions.launch" />
 <include file="$(find actions)/launch/double_hough_circles.launch" />
-<include file="$(find actions)/launch/double_hsv_color_filter.launch" />
+<include file="$(find actions)/launch/double_hsv_color_filter.launch" /> -->
 
 </launch>
