@@ -40,7 +40,7 @@ class CommandRecognition():
         ## Allow to switch from real robot to simulation from launch file
         self.robot_name = rospy.get_param ( '/robot_name', 'rob01')
         topic_root = "/miro/" + self.robot_name
-        print "topic_root", topic_root
+        print("topic_root", topic_root)
 
         ## Initialization of the enabling command
         self.activate = False
@@ -168,7 +168,7 @@ class CommandRecognition():
                 self.pub_platform_control.publish(q)
                 self.activate = False
                 count_sleep = 1
-                print "Sleep"
+                print("Sleep")
             
             # BAD
             elif self.activate and (self.command == "Bad" or self.command == " Bad" or  self.command == "bad" or self.command == " bad"):
@@ -182,7 +182,7 @@ class CommandRecognition():
                     q.body_vel.angular.z = 0.0
                     q.lights_raw = [255,0,0,255,0,0,255,0,0,255,0,0,255,0,0,255,0,0]
                     self.pub_platform_control.publish(q)
-                print "Bad"
+                print("Bad")
             
             # PLAY
             elif self.activate and (self.command == "Play" or self.command == " Play" or self.command == "play" or self.command == " play"):
@@ -197,21 +197,21 @@ class CommandRecognition():
                 q.body_config_speed = [0.0,-1.0,-1.0,-1.0]
                 q = self.q_gbb
                 self.pub_platform_control.publish(q)  
-                print "Let's go out"
+                print("Let's go out")
 
             # GOOD
             elif self.activate and (self.command == "Good" or self.command == " Good" or self.command == "good" or self.command == " good"):
                 count_bad = 0
                 q = self.q_good
                 self.pub_platform_control.publish(q)  
-                print "Good"
+                print("Good")
 
             # KILL
             elif self.activate and (self.command == "Kill" or self.command == " Kill" or self.command == "kill" or self.command == " kill"):
                 count_bad = 0
                 q = self.q_kill
                 self.pub_platform_control.publish(q)  
-                print "Kill"
+                print("Kill")
 
             # HANDLING OF DIFFERENT COMMANDS
             elif count_sleep == 1 and (not self.activate and not self.command == "Sleep"):
