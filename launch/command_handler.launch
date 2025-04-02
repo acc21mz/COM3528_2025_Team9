@@ -1,0 +1,35 @@
+<launch>
+
+<!-- REAL ROBOT OR SIMULATION -->
+<!-- Real miro = rob01 | Simulation miro = sim01 -->
+
+<param name="/robot_name" value="rob01" />
+
+<!-- NODE RATE-->
+<param name = "rate" value="200" />
+
+<!-- BALL COLOR -->
+
+<arg name="h_limit_max" default="127" doc="The maximum allowed field value Hue" />
+<arg name="h_limit_min" default="110" doc="The minimum allowed field value Hue" />
+
+<arg name="s_limit_max" default="227" doc="The maximum allowed field value Saturation" />
+<arg name="s_limit_min" default="150" doc="The minimum allowed field value Saturation" />
+<arg name="v_limit_max" default="209" doc="The maximum allowed field value Value" />
+<arg name="v_limit_min" default="150" doc="The minimum allowed field value Value" />
+ 
+<!-- SPEECH RECOGNITION -->
+
+<include file="$(find speech_interaction)/launch/speech_back_example.launch"/>
+
+<!-- HANDLING COMMANDS -->
+
+<!-- <node name="command_activation" pkg="command_handler" type="command_activation.py" /> -->
+<node name="command_recognition" pkg="command_handler" type="command_recognition.py" output = "screen"/>
+
+<!-- ACTIONS -->
+<include file="$(find actions)/launch/actions.launch" />
+<include file="$(find actions)/launch/double_hough_circles.launch" />
+<include file="$(find actions)/launch/double_hsv_color_filter.launch" />
+
+</launch>
