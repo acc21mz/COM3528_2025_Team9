@@ -20,11 +20,11 @@ from miro_constants import miro
 from datetime import datetime
 
 """
-bark.py implements the action corresponding to the "bark" command
+speak.py implements the action corresponding to the "speak" command
 MiRo responds by playing a bark audio file
 """
 
-class Bark():
+class Speak():
 
     def __init__(self):
         ## Node rate
