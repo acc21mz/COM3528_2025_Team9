@@ -27,7 +27,7 @@ def listen_and_publish():
             print(f"✅ You said: {text}")
             rospy.loginfo(f"[STT] Publishing: {text}")
             pub.publish(String(data=text))
-            command_rec.CommandRecognition().callback_receive_command(text)
+            #command_rec.CommandRecognition().callback_receive_command(text)
         except sr.UnknownValueError:
             print("❌ Could not understand audio.")
         except sr.RequestError as e:

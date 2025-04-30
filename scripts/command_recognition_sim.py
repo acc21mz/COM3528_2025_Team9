@@ -33,6 +33,9 @@ class CommandRecognition:
         self.q_gbb = DummyPlatformControl()
         self.q_good = DummyPlatformControl()
         self.q_kill = DummyPlatformControl()
+        
+        # subscriber to receive commands from speech recognition
+        self.sub_speech_recognition = rospy.Subscriber(self.topic_root + "/speech_to_text", String, self.callback_receive_command, queue_size=1)
 
         # Publisher to simulate robot control topic
         self.pub_platform_control = rospy.Publisher(self.topic_root + "/platform/control", String, queue_size=1)
@@ -51,6 +54,9 @@ class CommandRecognition:
         rospy.sleep(0.5)  # Short spin burst
         twist.angular.z = 0.0
         self.pub_velocity.publish(twist)
+        
+    def get_command(self):
+        return self.command
 
     def switching_commands(self):
         r = rospy.Rate(self.rate)
@@ -60,54 +66,56 @@ class CommandRecognition:
 
         while not rospy.is_shutdown():
             response = None
+            self.command = self.get_command()
+            if self.command != "":
+                
+                if self.command.lower() == "miro":
+                    count_miro += 1
+                    count_sleep = 0
+                    if count_miro == 1:
+                        response = "[MIRO ACTIVATED]"
+                    self.activate = True
 
-            if self.command.lower() == "miro":
-                count_miro += 1
-                count_sleep = 0
-                if count_miro == 1:
-                    response = "[MIRO ACTIVATED]"
-                self.activate = True
+                elif self.activate and self.command.lower() == "sleep":
+                    count_miro = 0
+                    count_bad = 0
+                    self.activate = False
+                    count_sleep = 1
+                    response = "[SLEEP MODE ACTIVATED]"
 
-            elif self.activate and self.command.lower() == "sleep":
-                count_miro = 0
-                count_bad = 0
-                self.activate = False
-                count_sleep = 1
-                response = "[SLEEP MODE ACTIVATED]"
+                elif self.activate and self.command.lower() == "bad":
+                    count_bad += 1
+                    if count_bad < 2000:
+                        response = f"[BAD COMMAND TRIGGERED - count {count_bad}]"
+                    else:
+                        response = "[BAD MAX REACHED - Lights RED]"
 
-            elif self.activate and self.command.lower() == "bad":
-                count_bad += 1
-                if count_bad < 2000:
-                    response = f"[BAD COMMAND TRIGGERED - count {count_bad}]"
-                else:
-                    response = "[BAD MAX REACHED - Lights RED]"
+                elif self.activate and self.command.lower() == "play":
+                    count_bad = 0
+                    response = "[PLAY MODE TRIGGERED]"
 
-            elif self.activate and self.command.lower() == "play":
-                count_bad = 0
-                response = "[PLAY MODE TRIGGERED]"
+                elif self.activate and self.command.lower() == "let's go out":
+                    count_bad = 0
+                    response = "[LET'S GO OUT TRIGGERED]"
 
-            elif self.activate and self.command.lower() == "let's go out":
-                count_bad = 0
-                response = "[LET'S GO OUT TRIGGERED]"
+                elif self.activate and self.command.lower() == "good":
+                    count_bad = 0
+                    response = "[GOOD COMMAND TRIGGERED]"
 
-            elif self.activate and self.command.lower() == "good":
-                count_bad = 0
-                response = "[GOOD COMMAND TRIGGERED]"
+                elif self.activate and self.command.lower() == "kill":
+                    count_bad = 0
+                    response = "[KILL COMMAND TRIGGERED]"
 
-            elif self.activate and self.command.lower() == "kill":
-                count_bad = 0
-                response = "[KILL COMMAND TRIGGERED]"
+                elif count_sleep == 1 and not self.activate and self.command.lower() != "sleep":
+                    response = "[ROBOT SLEEPING - Ignoring Command]"
 
-            elif count_sleep == 1 and not self.activate and self.command.lower() != "sleep":
-                response = "[ROBOT SLEEPING - Ignoring Command]"
+                if response:
+                    rospy.loginfo(response)
+                    self.pub_platform_control.publish(response)
+                    self.spin_once()
+                    self.command = ""
 
-            if response:
-                rospy.loginfo(response)
-                self.pub_platform_control.publish(response)
-                self.spin_once()
-                self.command = ""
-
-            r.sleep()
+                r.sleep()
 
 if __name__ == '__main__':
     rospy.init_node('command_recognition')
