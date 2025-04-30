@@ -22,7 +22,7 @@ from datetime import datetime
 
 """
 play_dead.py implements the action corresponding to the "play dead" command
-MiRo responds by stopping all motion, dropping its head, closing its eyes, and drooping its tail and ears
+MiRo responds by stopping all motion, dropping its head, closing its eyes, and dro
 """
 
 class PlayDead():
