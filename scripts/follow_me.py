@@ -19,13 +19,12 @@ from miro_constants import miro
 
 from datetime import datetime
 
-
 """
-speak.py implements the action corresponding to the "speak" command
-MiRo responds by playing a bark audio file
+follow_me.py implements the action corresponding to the "Follow me" command
+MiRo responds by identifying a nearby object and then moving towards it until it touches it
 """
 
-class Speak():
+class FollowMe():
 
     def __init__(self):
         ## Node rate
