@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 ################################################################
 
@@ -9,17 +9,17 @@ from std_msgs.msg import String,Bool,Int32
 from sensor_msgs.msg import Image,CompressedImage,Range,Imu
 from geometry_msgs.msg import Twist,Pose
 
-import miro_msgs
-from miro_msgs.msg import platform_config,platform_sensors,platform_state,platform_mics,platform_control,core_state,core_control,core_config,bridge_config,bridge_stream
-
+#only when testing on real miro uncomment these
+#import miro_msgs
+#from miro_msgs.msg import platform_config,platform_sensors,platform_state,platform_mics,platform_control,core_state,core_control,core_config,bridge_config,bridge_stream
+#from miro_constants import miro
 import opencv_apps
 from opencv_apps.msg import CircleArrayStamped
 
-import math
-import numpy
-import time
-import sys
-from miro_constants import miro
+# import math
+# import numpy
+# import time
+# import sys
 from datetime import datetime
 
 ## \file command_recognition.py 
@@ -40,9 +40,9 @@ class CommandRecognition():
 
         #topic root
         ## Allow to switch from real robot to simulation from launch file
-        self.robot_name = rospy.get_param ( '/robot_name', 'rob01')
-        topic_root = "/miro/" + self.robot_name
-        print("topic_root", topic_root)
+        self.robot_name = rospy.get_param ( '/robot_name', 'sim01')
+        self.topic_root = "/miro/" + self.robot_name
+        print("topic_root", self.topic_root)
 
         ## Initialization of the enabling command
         self.activate = False
@@ -65,7 +65,7 @@ class CommandRecognition():
         self.q_kill = platform_control()
 
         ## Subscriber to the topic /speech_to_text a message of type String that cointains the vocal command converted in text
-        self.sub_speech_to_text = rospy.Subscriber('/speech_to_text', String, self.callback_receive_command,queue_size=1)
+        #self.sub_speech_to_text = rospy.Subscriber('/speech_to_text', String, self.callback_receive_command,queue_size=1)
 
         #------------------ ADD SUBSCRIBERS TO NEW COMMANDS -------------------#
         ## Subscriber to the topic /miro_sleep a message of type platform_control that rapresents the action corresponting to the command "Sleep"
@@ -89,7 +89,7 @@ class CommandRecognition():
     def callback_receive_command(self, text):
 
         self.command = text.data
-
+        print(f"🗣️ Heard: {text.data}")
     #------------------ ADD CALLBACK FOR NEW COMMANDS -------------------#    
     ## Callback that receives the action to be executed when the vocal command is "Sleep"
     def callback_sleep_action(self, sleep):

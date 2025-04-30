@@ -3,7 +3,7 @@
 import rospy
 from std_msgs.msg import String
 import speech_recognition as sr
-import command_recognition_sim as command_rec
+import command_recognition_sim as command_rec #change this to command_recognition for real miro
 
 def listen_and_publish():
     rospy.init_node('speech_to_text_node', anonymous=True)
