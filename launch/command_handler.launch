@@ -3,7 +3,7 @@
 <!-- REAL ROBOT OR SIMULATION -->
 <!-- Real miro = rob01 | Simulation miro = sim01 -->
 
-<param name="/robot_name" value="rob01" />
+<param name="/robot_name" value="sim01" />
 
 <!-- NODE RATE-->
 <param name = "rate" value="200" />
@@ -17,15 +17,18 @@
 <arg name="s_limit_min" default="150" doc="The minimum allowed field value Saturation" />
 <arg name="v_limit_max" default="209" doc="The maximum allowed field value Value" />
 <arg name="v_limit_min" default="150" doc="The minimum allowed field value Value" />
- 
-<!-- SPEECH RECOGNITION -->
 
-<include file="$(find speech_interaction)/launch/speech_back_example.launch"/>
 
 <!-- HANDLING COMMANDS -->
 
 <!-- <node name="command_activation" pkg="command_handler" type="command_activation.py" /> -->
-<node name="command_recognition" pkg="cogbiogroup9" type="command_recognition.py" output = "screen"/>
+<node pkg="cogbiogroup9" type="command_recognition_sim.py" name="command_recognition" output="screen">
+    <param name="rosconsole" value="debug"/>
+</node>
+
+<!-- SPEECH RECOGNITION -->
+
+<node pkg="cogbiogroup9" type="speech_to_text_node.py" name="speech_to_text_node" output="screen"/>
 
 <!-- ACTIONS: WE NEED TO IMPLEMENT THIS --> 
 <!-- <include file="$(find actions)/launch/actions.launch" />
