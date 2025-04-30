@@ -3,11 +3,12 @@
 import rospy
 from std_msgs.msg import String
 import speech_recognition as sr
-import command_recognition_sim as command_rec #change this to command_recognition for real miro
 
 def listen_and_publish():
+    robot_name = rospy.get_param('/robot_name', 'sim01')
+    topic_root = "/miro/" + robot_name
     rospy.init_node('speech_to_text_node', anonymous=True)
-    pub = rospy.Publisher('/speech_to_text', String, queue_size=10)
+    pub = rospy.Publisher(topic_root + '/speech_to_text', String, queue_size=10)
 
     recognizer = sr.Recognizer()
     mic = sr.Microphone()
@@ -27,7 +28,6 @@ def listen_and_publish():
             print(f"✅ You said: {text}")
             rospy.loginfo(f"[STT] Publishing: {text}")
             pub.publish(String(data=text))
-            #command_rec.CommandRecognition().callback_receive_command(text)
         except sr.UnknownValueError:
             print("❌ Could not understand audio.")
         except sr.RequestError as e:

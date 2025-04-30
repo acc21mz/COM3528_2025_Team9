@@ -24,7 +24,7 @@ class CommandRecognition:
         print("topic_root", self.topic_root)
 
         self.activate = False
-        self.command = String()
+        self.command = ""
 
         # Simulated control messages
         self.q_sleep = DummyPlatformControl()
@@ -44,7 +44,8 @@ class CommandRecognition:
         self.pub_velocity = rospy.Publisher(self.topic_root + "/platform/velocity", Twist, queue_size=1)
 
     def callback_receive_command(self, text):
-        self.command = text
+        print(text)
+        self.command = text.data.strip().lower()
         print(f"\U0001F5E3️ Heard: {self.command}")
         
     def spin_once(self):
@@ -65,48 +66,48 @@ class CommandRecognition:
         count_sleep = 0
 
         while not rospy.is_shutdown():
+            
             response = None
-            self.command = self.get_command()
+            #self.command = (self.sub_speech_recognition.callback)
             if self.command != "":
-                
-                if self.command.lower() == "miro":
+                if self.command in ["miro", "myro", "myra"]:
                     count_miro += 1
                     count_sleep = 0
-                    if count_miro == 1:
+                    if count_miro >= 1:
                         response = "[MIRO ACTIVATED]"
                     self.activate = True
 
-                elif self.activate and self.command.lower() == "sleep":
+                elif self.activate and self.command == "sleep":
                     count_miro = 0
                     count_bad = 0
                     self.activate = False
                     count_sleep = 1
                     response = "[SLEEP MODE ACTIVATED]"
 
-                elif self.activate and self.command.lower() == "bad":
+                elif self.activate and self.command == "bad":
                     count_bad += 1
                     if count_bad < 2000:
                         response = f"[BAD COMMAND TRIGGERED - count {count_bad}]"
                     else:
                         response = "[BAD MAX REACHED - Lights RED]"
 
-                elif self.activate and self.command.lower() == "play":
+                elif self.activate and self.command == "play":
                     count_bad = 0
                     response = "[PLAY MODE TRIGGERED]"
 
-                elif self.activate and self.command.lower() == "let's go out":
+                elif self.activate and self.command == "let's go out":
                     count_bad = 0
                     response = "[LET'S GO OUT TRIGGERED]"
 
-                elif self.activate and self.command.lower() == "good":
+                elif self.activate and self.command == "good":
                     count_bad = 0
                     response = "[GOOD COMMAND TRIGGERED]"
 
-                elif self.activate and self.command.lower() == "kill":
+                elif self.activate and self.command == "kill":
                     count_bad = 0
                     response = "[KILL COMMAND TRIGGERED]"
 
-                elif count_sleep == 1 and not self.activate and self.command.lower() != "sleep":
+                elif count_sleep == 1 and not self.activate and self.command != "sleep":
                     response = "[ROBOT SLEEPING - Ignoring Command]"
 
                 if response:
