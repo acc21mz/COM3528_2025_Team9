@@ -2,6 +2,8 @@
 
 import rospy
 from std_msgs.msg import String, Int8
+import subprocess
+import os
 
 class UnrecognisedCommand:
     def __init__(self):
@@ -9,6 +11,7 @@ class UnrecognisedCommand:
         self.pub_speak = rospy.Publisher('/tts', String, queue_size=1, latch=True)
         self.pub_platform_control = rospy.Publisher('/miro/platform/control', String, queue_size=1, latch=True)
         self.pub_sound = rospy.Publisher('/miro/sound/command', Int8, queue_size=1, latch=True)
+        self.beep_path = os.path.join(os.path.dirname(__file__), '../src/beep-warning-6387.mp3')
 
     def unrecognised_response(self):
         r = rospy.Rate(self.rate)
@@ -21,9 +24,8 @@ class UnrecognisedCommand:
         q.data = "Unrecognised command response."
         self.pub_platform_control.publish(q)
 
-        sound_msg = Int8()
-        sound_msg.data = 5 # beep noise
-        self.pub_sound.publish(sound_msg)
+        # Play the custom beep sound file
+        subprocess.Popen(['mpg123', self.beep_path])
 
         rospy.loginfo("Published unrecognised command response and sound.")
         rospy.sleep(2)
