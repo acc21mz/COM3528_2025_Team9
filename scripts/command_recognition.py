@@ -163,7 +163,7 @@ class CommandRecognition():
                 self.activate = True
 
             # play_dead
-            if self.activate and self.command == "play dead" or self.command == " Play dead" or self.command == "play Dead" or self.command == " PLAY DEAD":
+            if self.activate and self.command == "play dead" or self.command == " Play dad" or self.command == "play Dad" or self.command == " PLAY DEAD":
                 count_miro = 0
                 count_bad = 0
                 q = self.q_play_dead
