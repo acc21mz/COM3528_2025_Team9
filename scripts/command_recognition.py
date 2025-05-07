@@ -40,7 +40,7 @@ class CommandRecognition():
 
         #topic root
         ## Allow to switch from real robot to simulation from launch file
-        self.robot_name = rospy.get_param ( '/robot_name', 'sim01')
+        self.robot_name = rospy.get_param ( '/robot_name', 'dia-miro12')
         self.topic_root = "/miro/" + self.robot_name
         print("topic_root", self.topic_root)
 
