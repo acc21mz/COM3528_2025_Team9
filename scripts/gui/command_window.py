@@ -22,8 +22,6 @@ class CommandWindow:
         wake_frame.pack(padx=10, pady=5, fill="x")
         
         tk.Button(wake_frame, text="MiRo", command=lambda: self.send_command("miro")).pack(side=tk.LEFT, padx=5)
-        tk.Button(wake_frame, text="Myro", command=lambda: self.send_command("myro")).pack(side=tk.LEFT, padx=5)
-        tk.Button(wake_frame, text="Myra", command=lambda: self.send_command("myra")).pack(side=tk.LEFT, padx=5)
         
         # Action buttons
         action_frame = tk.LabelFrame(self.root, text="Commands", padx=5, pady=5)
