@@ -32,7 +32,7 @@ class PlayDead():
         ## Node rate
         self.rate = rospy.get_param('rate',200)
 
-        self.pub_platform_control = rospy.Publisher('/miro_sleep',platform_control,queue_size=0)
+        self.pub_platform_control = rospy.Publisher('/miro_play_dead',platform_control,queue_size=0)
     
     ## Function that sets the parameters of the structure platform_control corresponding to action "Sleep"
     def miro_dead(self):
@@ -56,6 +56,6 @@ class PlayDead():
        
 
 if __name__== '__main__':
-    rospy.init_node('sleep', disable_signals=True)
+    rospy.init_node('play dead', disable_signals=True)
     sleep = PlayDead()
     sleep.miro_dead()

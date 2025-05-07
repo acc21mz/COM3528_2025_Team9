@@ -52,7 +52,7 @@ class CommandRecognition():
         #------------------ ADD OBJECTS OF NEW COMMANDS ----------------------#
 
         ## Platform control Object that represents the sleep action ("Sleep")
-        self.q_sleep = platform_control()
+        self.q_play_dead = platform_control()
         ## Platform control Object that represents the miro action when it is scolded ("Bad")
         self.q_sad = platform_control()
         ## Platform control Object that represents the miro action when it follows the Ball ("Play")
@@ -68,8 +68,8 @@ class CommandRecognition():
         self.sub_speech_to_text = rospy.Subscriber('/speech_to_text', String, self.callback_receive_command,queue_size=1)
 
         #------------------ ADD SUBSCRIBERS TO NEW COMMANDS -------------------#
-        ## Subscriber to the topic /miro_sleep a message of type platform_control that rapresents the action corresponting to the command "Sleep"
-        self.sub_sleep_action = rospy.Subscriber('/miro_sleep', platform_control, self.callback_sleep_action,queue_size=1)
+        ## Subscriber to the topic /miro_sleep a message of type platform_control that rapresents the action corresponting to the command "play_dead"
+        self.sub_play_dead_action = rospy.Subscriber('/miro_play_dead', platform_control, self.callback_play_dead_action,queue_size=1)
         ## Subscriber to the topic /miro_sad a message of type platform_control that rapresents the action corresponting to the command "Bad"
         self.sub_sad_action = rospy.Subscriber('/miro_sad', platform_control, self.callback_sad_action,queue_size=1) 
         ## Subscriber to the topic /miro_follow a message of type platform_control that rapresents the action corresponting to the command "Play"
@@ -91,10 +91,10 @@ class CommandRecognition():
         self.command = text.data
         print(f"🗣️ Heard: {text.data}")
     #------------------ ADD CALLBACK FOR NEW COMMANDS -------------------#    
-    ## Callback that receives the action to be executed when the vocal command is "Sleep"
-    def callback_sleep_action(self, sleep):
+    ## Callback that receives the action to be executed when the vocal command is "play_dead"
+    def callback_play_dead_action(self, play_dead):
 
-        self.q_sleep = sleep
+        self.q_play_dead = play_dead
 
     ## Callback that receives the action to be executed when the vocal command is "Bad"
     def callback_sad_action(self, sad):
@@ -129,8 +129,8 @@ class CommandRecognition():
     ## @n The command "Good" is executed only if self.active is True and publish the action managed by the node good.py
     ## @n The command "Play" is executed only if self.active is True and publish the action managed by the node play.py
     ## @n The command "Let's go out" is executed only if self.active is True and publish the action managed by the node gbb_miro.py
-    ## @n The command "Sleep" is executed only if self.active is True and publish the action managed by the node sleep.py. 
-    ## @n The variable activate is set to False and Miro remains in sleep mode until a new command "Miro" is received.
+    ## @n The command "play_dead" is executed only if self.active is True and publish the action managed by the node play_dead.py. 
+    ## @n The variable activate is set to False and Miro remains in play_dead mode until a new command "Miro" is received.
     def switching_commands(self):
 
         q = platform_control()
@@ -139,7 +139,7 @@ class CommandRecognition():
         r = rospy.Rate(self.rate)
         count_bad = 0
         count_miro = 0
-        count_sleep = 0
+        count_play_dead = 0
         
         while not rospy.is_shutdown():
 
@@ -149,7 +149,7 @@ class CommandRecognition():
                 count_miro = 0
                 count_miro = count_miro +1
                 rospy.loginfo(count_miro)
-                count_sleep = 0
+                count_play_dead = 0
 
                 if count_miro == 1:
                     q.eyelid_closure = 0.0
@@ -162,15 +162,15 @@ class CommandRecognition():
                     
                 self.activate = True
 
-            # SLEEP
-            if self.activate and self.command == "Sleep" or self.command == " Sleep" or self.command == "sleep" or self.command == " sleep":
+            # play_dead
+            if self.activate and self.command == "play dead" or self.command == " Play dead" or self.command == "play Dead" or self.command == " PLAY DEAD":
                 count_miro = 0
                 count_bad = 0
-                q = self.q_sleep
+                q = self.q_play_dead
                 self.pub_platform_control.publish(q)
                 self.activate = False
-                count_sleep = 1
-                print("Sleep")
+                count_play_dead = 1
+                print("Play dead")
             
             # BAD
             elif self.activate and (self.command == "Bad" or self.command == " Bad" or  self.command == "bad" or self.command == " bad"):
