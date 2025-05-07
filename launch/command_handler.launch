@@ -22,7 +22,7 @@
 <!-- HANDLING COMMANDS -->
 
 <!-- <node name="command_activation" pkg="command_handler" type="command_activation.py" /> -->
-<node pkg="cogbiogroup9" type="command_recognition_sim.py" name="command_recognition" output="screen">
+<node pkg="cogbiogroup9" type="command_recognition.py" name="command_recognition" output="screen">
     <param name="rosconsole" value="debug"/>
 </node>
 

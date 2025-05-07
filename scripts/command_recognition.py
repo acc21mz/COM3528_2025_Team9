@@ -10,9 +10,9 @@ from sensor_msgs.msg import Image,CompressedImage,Range,Imu
 from geometry_msgs.msg import Twist,Pose
 
 #only when testing on real miro uncomment these
-#import miro_msgs
-#from miro_msgs.msg import platform_config,platform_sensors,platform_state,platform_mics,platform_control,core_state,core_control,core_config,bridge_config,bridge_stream
-#from miro_constants import miro
+import miro_msgs
+from miro_msgs.msg import platform_config,platform_sensors,platform_state,platform_mics,platform_control,core_state,core_control,core_config,bridge_config,bridge_stream
+from miro_constants import miro
 import opencv_apps
 from opencv_apps.msg import CircleArrayStamped
 
