@@ -65,7 +65,7 @@ class CommandRecognition():
         self.q_kill = platform_control()
 
         ## Subscriber to the topic /speech_to_text a message of type String that cointains the vocal command converted in text
-        #self.sub_speech_to_text = rospy.Subscriber('/speech_to_text', String, self.callback_receive_command,queue_size=1)
+        self.sub_speech_to_text = rospy.Subscriber('/speech_to_text', String, self.callback_receive_command,queue_size=1)
 
         #------------------ ADD SUBSCRIBERS TO NEW COMMANDS -------------------#
         ## Subscriber to the topic /miro_sleep a message of type platform_control that rapresents the action corresponting to the command "Sleep"
