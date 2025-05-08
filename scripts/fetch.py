@@ -331,13 +331,14 @@ class Fetch():
         forward until it kicks the ball!
         """
         if self.just_switched:
-            print("MiRo is kicking the ball!")
+            print("MiRo has found the ball!")
             self.just_switched = False
         if self.counter <= self.bookmark + 2 / self.TICK and not self.TRANSLATION_ONLY:
             self.drive(self.FAST, self.FAST)
         else:
             self.status_code = 0  # Back to the default state after the kick
             self.just_switched = True
+            self.done = True
 
     def __init__(self):
         # Initialise a new ROS node to communicate with MiRo, if needed
@@ -397,6 +398,7 @@ class Fetch():
         # This switch loops through MiRo behaviours:
         # Find ball, lock on to the ball and kick ball
         self.status_code = 0
+        self.done = False
         while not rospy.core.is_shutdown():
 
             # Step 1. Find ball
@@ -419,7 +421,10 @@ class Fetch():
 
             # Yield
             self.counter += 1
+            if self.done:
+                break
             rospy.sleep(self.TICK)
+            
 
 
 # This condition fires when the script is called directly

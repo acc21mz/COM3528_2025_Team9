@@ -5,17 +5,17 @@ from std_msgs.msg import String, UInt16MultiArray, Int16MultiArray
 from sensor_msgs.msg import Image, CompressedImage, Range, Imu
 from geometry_msgs.msg import Twist, Pose
 
-import miro_msgs
-from miro_msgs.msg import platform_config, platform_sensors, platform_state, platform_mics, platform_control, core_state, core_control, core_config, bridge_config, bridge_stream
+# import miro_msgs
+# from miro_msgs.msg import platform_config, platform_sensors, platform_state, platform_mics, platform_control, core_state, core_control, core_config, bridge_config, bridge_stream
 
-import opencv_apps
-from opencv_apps.msg import CircleArrayStamped
+# import opencv_apps
+# from opencv_apps.msg import CircleArrayStamped
 
 import math
 import numpy as np
 import time
 import sys
-from miro_constants import miro
+# from miro_constants import miro
 import os
 from datetime import datetime
 
@@ -32,14 +32,14 @@ class Speak():
 
         ## Node rate
         self.rate = rospy.get_param('rate',200)
-        file = "../bark.wav"
+        file = "/home/student/pkgs/mdk-230105/catkin_ws/src/com3528_team09/cogbiogroup9/scripts/bark.wav"
         # load wav
         with open(file, 'rb') as f:
             dat = f.read()
         self.data_r = 0
 
         # convert to numpy array
-        dat = np.fromstring(dat, dtype='int16').astype(np.int32)
+        dat = np.frombuffer(dat, dtype='int16').astype(np.int32)
 
         # normalise wav
         dat = dat.astype(np.float)
@@ -79,21 +79,21 @@ class Speak():
     def loop(self):
         while not rospy.core.is_shutdown():
             #check state_file
-            # if we've received a report
-            if self.buffer_total > 0:
+            # # if we've received a report
+            # if self.buffer_total > 0:
 
-                # compute amount to send
-                buffer_rem = self.buffer_total - self.buffer_space
-                n_bytes = BUFFER_STUFF_BYTES - buffer_rem
-                n_bytes = max(n_bytes, 0)
-                n_bytes = min(n_bytes, MAX_STREAM_MSG_SIZE)
+            #     # compute amount to send
+            #     buffer_rem = self.buffer_total - self.buffer_space
+            #     n_bytes = BUFFER_STUFF_BYTES - buffer_rem
+            #     n_bytes = max(n_bytes, 0)
+            #     n_bytes = min(n_bytes, MAX_STREAM_MSG_SIZE)
 
-                # if amount to send is non-zero
-                if n_bytes > 0:
+            #     # if amount to send is non-zero
+                # if n_bytes > 0:
 
-                    msg = Int16MultiArray(data = self.data[self.data_r:self.data_r+n_bytes])
-                    self.pub_stream.publish(msg)
-                    self.data_r += n_bytes
+            msg = Int16MultiArray(data = self.data)
+            self.pub_stream.publish(msg)
+            # self.data_r += n_byte
 
             # break
             if self.data_r >= len(self.data):
@@ -121,4 +121,4 @@ if __name__ == "__main__":
 
     rospy.init_node("client_stream", anonymous=True)
     main = Speak()
-    main.loop(sys.argv[2:])
+    main.loop()
