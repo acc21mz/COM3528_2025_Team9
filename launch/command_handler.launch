@@ -1,9 +1,7 @@
 <launch>
 
-<!-- REAL ROBOT OR SIMULATION -->
-<!-- Real miro = rob01 | Simulation miro = sim01 -->
-
 <param name="/robot_name" value="sim01" />
+<!--param name="/robot_name" value="dia-miro12" /-->
 
 <!-- NODE RATE-->
 <param name = "rate" value="200" />
