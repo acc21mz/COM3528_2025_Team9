@@ -9,5 +9,6 @@
 <node name="fetch" pkg="cogbiogroup9" type="fetch.py"/>
 <node name="follow me" pkg="cogbiogroup9" type="follow_me.py"/>
 <node name="speak" pkg="cogbiogroup9" type="speak.py"/>
+<node name="unrecognised command" pkg="cogbiogroup9" type="unrecognised_command.py"/>
 
 </launch>

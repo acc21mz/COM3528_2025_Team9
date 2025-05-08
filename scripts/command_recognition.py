@@ -21,6 +21,7 @@ from opencv_apps.msg import CircleArrayStamped
 # import time
 # import sys
 from datetime import datetime
+import subprocess
 
 ## \file command_recognition.py 
 ## \brief The node command_recognition.py recognize vocal command converted as String and publish the associated robot's action
@@ -40,7 +41,7 @@ class CommandRecognition():
 
         #topic root
         ## Allow to switch from real robot to simulation from launch file
-        self.robot_name = rospy.get_param ( '/robot_name', 'dia-miro12')
+        self.robot_name = rospy.get_param ( '/robot_name', 'sim01')
         self.topic_root = "/miro/" + self.robot_name
         print("topic_root", self.topic_root)
 
@@ -52,7 +53,7 @@ class CommandRecognition():
         #------------------ ADD OBJECTS OF NEW COMMANDS ----------------------#
 
         ## Platform control Object that represents the sleep action ("Sleep")
-        self.q_play_dead = platform_control()
+        self.q_sleep = platform_control()
         ## Platform control Object that represents the miro action when it is scolded ("Bad")
         self.q_sad = platform_control()
         ## Platform control Object that represents the miro action when it follows the Ball ("Play")
@@ -63,13 +64,15 @@ class CommandRecognition():
         self.q_good = platform_control()
         ## Platform control Object that represents the miro action when it is praised ("Kill")
         self.q_kill = platform_control()
+        self.q_unrecognised_command = platform_control()
+        self.unrecognised_pub = rospy.Publisher('/unrecognised_command_trigger', String, queue_size=1)
 
         ## Subscriber to the topic /speech_to_text a message of type String that cointains the vocal command converted in text
-        self.sub_speech_to_text = rospy.Subscriber('/speech_to_text', String, self.callback_receive_command,queue_size=1)
+        #self.sub_speech_to_text = rospy.Subscriber('/speech_to_text', String, self.callback_receive_command,queue_size=1)
 
         #------------------ ADD SUBSCRIBERS TO NEW COMMANDS -------------------#
-        ## Subscriber to the topic /miro_sleep a message of type platform_control that rapresents the action corresponting to the command "play_dead"
-        self.sub_play_dead_action = rospy.Subscriber('/miro_play_dead', platform_control, self.callback_play_dead_action,queue_size=1)
+        ## Subscriber to the topic /miro_sleep a message of type platform_control that rapresents the action corresponting to the command "Sleep"
+        self.sub_sleep_action = rospy.Subscriber('/miro_sleep', platform_control, self.callback_sleep_action,queue_size=1)
         ## Subscriber to the topic /miro_sad a message of type platform_control that rapresents the action corresponting to the command "Bad"
         self.sub_sad_action = rospy.Subscriber('/miro_sad', platform_control, self.callback_sad_action,queue_size=1) 
         ## Subscriber to the topic /miro_follow a message of type platform_control that rapresents the action corresponting to the command "Play"
@@ -82,7 +85,7 @@ class CommandRecognition():
         self.sub_kill_action = rospy.Subscriber('/miro_kill', platform_control, self.callback_kill_action,queue_size=1) 
 
         ## Publisher to the topic /platform/control a message of type platform_control which execute Miro actions 
-        self.pub_platform_control = rospy.Publisher(topic_root + "/platform/control", platform_control, queue_size=0)
+        self.pub_platform_control = rospy.Publisher(self.topic_root + "/platform/control", platform_control, queue_size=0)
     
     
     ## Callback function that receive and save the user's voice command as text
@@ -91,10 +94,10 @@ class CommandRecognition():
         self.command = text.data
         print(f"🗣️ Heard: {text.data}")
     #------------------ ADD CALLBACK FOR NEW COMMANDS -------------------#    
-    ## Callback that receives the action to be executed when the vocal command is "play_dead"
-    def callback_play_dead_action(self, play_dead):
+    ## Callback that receives the action to be executed when the vocal command is "Sleep"
+    def callback_sleep_action(self, sleep):
 
-        self.q_play_dead = play_dead
+        self.q_sleep = sleep
 
     ## Callback that receives the action to be executed when the vocal command is "Bad"
     def callback_sad_action(self, sad):
@@ -129,8 +132,8 @@ class CommandRecognition():
     ## @n The command "Good" is executed only if self.active is True and publish the action managed by the node good.py
     ## @n The command "Play" is executed only if self.active is True and publish the action managed by the node play.py
     ## @n The command "Let's go out" is executed only if self.active is True and publish the action managed by the node gbb_miro.py
-    ## @n The command "play_dead" is executed only if self.active is True and publish the action managed by the node play_dead.py. 
-    ## @n The variable activate is set to False and Miro remains in play_dead mode until a new command "Miro" is received.
+    ## @n The command "Sleep" is executed only if self.active is True and publish the action managed by the node sleep.py. 
+    ## @n The variable activate is set to False and Miro remains in sleep mode until a new command "Miro" is received.
     def switching_commands(self):
 
         q = platform_control()
@@ -139,7 +142,7 @@ class CommandRecognition():
         r = rospy.Rate(self.rate)
         count_bad = 0
         count_miro = 0
-        count_play_dead = 0
+        count_sleep = 0
         
         while not rospy.is_shutdown():
 
@@ -149,7 +152,7 @@ class CommandRecognition():
                 count_miro = 0
                 count_miro = count_miro +1
                 rospy.loginfo(count_miro)
-                count_play_dead = 0
+                count_sleep = 0
 
                 if count_miro == 1:
                     q.eyelid_closure = 0.0
@@ -162,15 +165,15 @@ class CommandRecognition():
                     
                 self.activate = True
 
-            # play_dead
-            if self.activate and self.command == "play dead" or self.command == " Play dad" or self.command == "play Dad" or self.command == " PLAY DEAD":
+            # SLEEP
+            if self.activate and self.command == "Sleep" or self.command == " Sleep" or self.command == "sleep" or self.command == " sleep":
                 count_miro = 0
                 count_bad = 0
-                q = self.q_play_dead
+                q = self.q_sleep
                 self.pub_platform_control.publish(q)
                 self.activate = False
-                count_play_dead = 1
-                print("Play dead")
+                count_sleep = 1
+                print("Sleep")
             
             # BAD
             elif self.activate and (self.command == "Bad" or self.command == " Bad" or  self.command == "bad" or self.command == " bad"):
@@ -215,11 +218,18 @@ class CommandRecognition():
                 self.pub_platform_control.publish(q)  
                 print("Kill")
 
-            # HANDLING OF DIFFERENT COMMANDS
+            # unrecognised
             elif count_sleep == 1 and (not self.activate and not self.command == "Sleep"):
-                rospy.loginfo(count_sleep)
-                q.eyelid_closure = 1
+                q = self.q_unrecognised_command
                 self.pub_platform_control.publish(q)
+
+            # handle unrecognised command (when active and not empty and not in valid commands)
+            valid_commands = [
+                "Miro", "miro", "Fetch","fetch", "Follow Me", "follow me", "play dead", "Play dead", "Speak", "speak"]
+            cmd = self.command.strip()
+            if self.activate and cmd and cmd not in valid_commands:
+                print(f"Unrecognised command: {cmd}")
+                self.unrecognised_pub.publish(String(data=cmd))
 
             r.sleep()
 

@@ -12,10 +12,12 @@ class UnrecognisedCommand:
         self.pub_platform_control = rospy.Publisher('/miro/platform/control', String, queue_size=1, latch=True)
         self.pub_sound = rospy.Publisher('/miro/sound/command', Int8, queue_size=1, latch=True)
         self.beep_path = os.path.join(os.path.dirname(__file__), '../src/beep-warning-6387.mp3')
+        rospy.Subscriber('/unrecognised_command_trigger', String, self.trigger_callback)
+
+    def trigger_callback(self, msg):
+        self.unrecognised_response()
 
     def unrecognised_response(self):
-        r = rospy.Rate(self.rate)
-
         msg = String()
         msg.data = "I don't understand"
         self.pub_speak.publish(msg)
@@ -33,4 +35,4 @@ class UnrecognisedCommand:
 if __name__ == '__main__':
     rospy.init_node('unrecognised_command')
     unrecognised = UnrecognisedCommand()
-    unrecognised.unrecognised_response()
+    rospy.spin()
