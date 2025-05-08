@@ -43,16 +43,27 @@ class EmergencyStop():
         self.vel_pub = rospy.Publisher(
             topic_base_name + "/control/cmd_vel", TwistStamped, queue_size=0
         )
+
+        self.pub_platform_control = rospy.Publisher(self.topic_root + "/platform/control", platform_control, queue_size=0)
         # Clean-up
         rospy.on_shutdown(self.shutdown_hook)
 
 
 
     def set_move_cmd(self, linear, angular):
+        # Option 1; publish to /cmd_vel topic, which is regular
         vel_cmd = TwistStamped()
         vel_cmd.twist.linear.x = linear
         vel_cmd.twist.angular.z = angular
         self.vel_pub.publish(vel_cmd)
+
+    
+    def set_move_cmd_platformctrl(self):
+        #Option 2; publish to /platform_control, aligns with everything else
+        stop_msg = platform_control() 
+        stop_msg.body_vel = Twist() # Linear and angular velocities set to 0
+        self.platform_control_pub.publish(stop_msg) 
+        
 
     def shutdown_hook(self):
         # Stop moving
@@ -105,7 +116,8 @@ if __name__== '__main__':
     # stop = EmergencyStop()
     # stop.miro_emergency()
     stop = EmergencyStop()
-    stop.set_move_cmd(linear=0.0, angular=0.0)
+    # stop.set_move_cmd(linear=0.0, angular=0.0)
+    stop.set_move_cmd_platformctrl()
 
     # while not rospy.is_shutdown():  # While this node is still running... (should this even be here?)
     #     stop.set_move_cmd(linear=0.0, angular=0.0) # MiRo should stop moving
