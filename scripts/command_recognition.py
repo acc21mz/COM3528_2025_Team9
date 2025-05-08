@@ -11,15 +11,11 @@ from geometry_msgs.msg import Twist,Pose
 
 #only when testing on real miro uncomment these
 import miro_msgs
-from miro_msgs.msg import platform_config,platform_sensors,platform_state,platform_mics,platform_control,core_state,core_control,core_config,bridge_config,bridge_stream
+from miro_msgs.msg import platform_control
 from miro_constants import miro
 import opencv_apps
 from opencv_apps.msg import CircleArrayStamped
 
-# import math
-# import numpy
-# import time
-# import sys
 from datetime import datetime
 
 class CommandRecognition():
@@ -114,7 +110,7 @@ class CommandRecognition():
                 self.activate = True
 
             # play_dead
-            if self.activate and self.command == "play dead" or self.command == " Play dad" or self.command == "play Dad" or self.command == "Play Dead":
+            if self.activate and self.command == "play dead" or self.command == "play dad":
                 count_miro = 0
                 q = self.q_play_dead
                 self.pub_platform_control.publish(q)
@@ -127,6 +123,7 @@ class CommandRecognition():
                 q.body_vel.linear.x = 0.0
                 q.body_vel.angular.z = 0.0
                 self.pub_platform_control.publish(q)
+                self.activate = False
                 print("Stop")
             
             # fetch
