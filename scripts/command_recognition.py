@@ -83,7 +83,7 @@ class CommandRecognition():
 
         ## Publisher to the topic /platform/control a message of type platform_control which execute Miro actions 
         self.pub_platform_control = rospy.Publisher(topic_root + "/platform/control", platform_control, queue_size=0)
-    
+            
     
     ## Callback function that receive and save the user's voice command as text
     def callback_receive_command(self, text):
