@@ -11,7 +11,7 @@ class UnrecognisedCommand:
         self.pub_speak = rospy.Publisher('/tts', String, queue_size=1, latch=True)
         self.pub_platform_control = rospy.Publisher('/miro/platform/control', String, queue_size=1, latch=True)
         self.pub_sound = rospy.Publisher('/miro/sound/command', Int8, queue_size=1, latch=True)
-        self.beep_path = os.path.join(os.path.dirname(__file__), '../src/beep-warning-6387.mp3')
+        self.beep_path = os.path.join(os.path.dirname(__file__), '../beep-warning-6387.mp3')
         rospy.Subscriber('/unrecognised_command_trigger', String, self.trigger_callback)
 
     def trigger_callback(self, msg):
