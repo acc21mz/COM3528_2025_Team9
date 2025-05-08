@@ -28,6 +28,7 @@ class CommandRecognition():
 
         ## Allow to switch from real robot to simulation from launch file
         self.robot_name = rospy.get_param ( '/robot_name', 'dia-miro12')
+        #self.robot_name = rospy.get_param ( '/robot_name', 'sim01')
         self.topic_root = "/miro/" + self.robot_name
         print("topic_root", self.topic_root)
 
@@ -44,15 +45,10 @@ class CommandRecognition():
         # subscriber to speech-to-text
         self.sub_speech_to_text = rospy.Subscriber('/speech_to_text', String, self.callback_receive_command,queue_size=1)
 
-        #sub to recieve actions 
         self.sub_play_dead_action = rospy.Subscriber('/miro_play_dead', platform_control, self.callback_play_dead_action,queue_size=1)
-        ## Subscriber to the topic /miro_sad a message of type platform_control that rapresents the action corresponting to the command "Bad"
         self.sub_stop_action = rospy.Subscriber('/miro_stop', platform_control, self.callback_stop_action,queue_size=1) 
-        ## Subscriber to the topic /miro_follow a message of type platform_control that rapresents the action corresponting to the command "Play"
         self.sub_fetch_action = rospy.Subscriber('/miro_fetch', platform_control, self.callback_fetch_action,queue_size=1) 
-        ## Subscriber to the topic /miro_dance a message of type platform_control that rapresents the action corresponting to the command "Let's go out"
         self.sub_follow_me_action = rospy.Subscriber('/miro_follow_me', platform_control, self.callback_follow_me_action,queue_size=1) 
-        ## Subscriber to the topic /miro_good a message of type platform_control that rapresents the action corresponting to the command "Good"
         self.sub_speak_action = rospy.Subscriber('/miro_speak', platform_control, self.callback_speak_action,queue_size=1) 
 
         ## Publisher to the topic /platform/control a message of type platform_control which execute Miro actions 
