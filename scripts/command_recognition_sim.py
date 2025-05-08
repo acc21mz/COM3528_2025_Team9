@@ -43,6 +43,9 @@ class CommandRecognition:
         # Publisher for velocity commands (to make robot spin)
         self.pub_velocity = rospy.Publisher(self.topic_root + "/platform/velocity", Twist, queue_size=1)
 
+        # Publisher for unrecognised commands
+        self.unrecognised_pub = rospy.Publisher('/unrecognised_command_trigger', String, queue_size=1)
+
     def callback_receive_command(self, text):
         print(text)
         self.command = text.data.strip().lower()
@@ -115,8 +118,20 @@ class CommandRecognition:
                     self.pub_platform_control.publish(response)
                     self.spin_once()
                     self.command = ""
-
+                else:
+                    # Only runs if no recognised command matched
+                    valid_commands = [
+                        "miro", "myro", "myra", "sleep", "bad", "play", "let's go out", "good", "kill", "fetch"
+                    ]
+                    if self.activate and self.command and self.command not in valid_commands:
+                        rospy.loginfo(f"Unrecognised command: {self.command}")
+                        print("Publishing to /unrecognised_command_trigger:", self.command)
+                        self.unrecognised_pub.publish(String(data=self.command))
+                        self.command = ""
                 r.sleep()
+
+    def trigger_callback(self, msg):
+        self.unrecognised_response()
 
 if __name__ == '__main__':
     rospy.init_node('command_recognition')

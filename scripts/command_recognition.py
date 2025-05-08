@@ -230,7 +230,6 @@ class CommandRecognition():
             if self.activate and cmd and cmd not in valid_commands:
                 print(f"Unrecognised command: {cmd}")
                 self.unrecognised_pub.publish(String(data=cmd))
-
             r.sleep()
 
 if __name__== '__main__':
