@@ -11,7 +11,7 @@ from geometry_msgs.msg import Twist,Pose
 
 #only when testing on real miro uncomment these
 import miro_msgs
-from miro_msgs.msg import platform_control
+from miro2_msgs.msg import platform_control
 from miro_constants import miro
 import opencv_apps
 from opencv_apps.msg import CircleArrayStamped
@@ -27,8 +27,8 @@ class CommandRecognition():
         self.rate = rospy.get_param('rate',200)
 
         ## Allow to switch from real robot to simulation from launch file
-        self.robot_name = rospy.get_param ( '/robot_name', 'dia-miro12')
-        #self.robot_name = rospy.get_param ( '/robot_name', 'sim01')
+        #self.robot_name = rospy.get_param ( '/robot_name', 'dia-miro12')
+        self.robot_name = rospy.get_param ( '/robot_name', 'sim01')
         self.topic_root = "/miro/" + self.robot_name
         print("topic_root", self.topic_root)
 
@@ -43,8 +43,8 @@ class CommandRecognition():
         self.q_speak = platform_control()
         
         # subscriber to speech-to-text
-        self.sub_speech_to_text = rospy.Subscriber('/speech_to_text', String, self.callback_receive_command,queue_size=1)
-
+        self.sub_speech_to_text = rospy.Subscriber(self.topic_root + '/speech_to_text', String, self.callback_receive_command,queue_size=1)
+        
         self.sub_play_dead_action = rospy.Subscriber('/miro_play_dead', platform_control, self.callback_play_dead_action,queue_size=1)
         self.sub_stop_action = rospy.Subscriber('/miro_stop', platform_control, self.callback_stop_action,queue_size=1) 
         self.sub_fetch_action = rospy.Subscriber('/miro_fetch', platform_control, self.callback_fetch_action,queue_size=1) 
