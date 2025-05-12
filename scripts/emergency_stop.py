@@ -18,6 +18,8 @@ import numpy
 import time
 import sys
 from miro_constants import miro
+from sensor_msgs.msg import JointState
+from std_msgs.msg import Float32MultiArray
 
 from datetime import datetime
 
@@ -34,7 +36,39 @@ class EmergencyStop():
         ## Node rate
         self.rate = rospy.get_param('rate',200)
 
-        self.pub_platform_control = rospy.Publisher('/miro_emergency',platform_control,queue_size=0)
+        # self.pub_platform_control = rospy.Publisher('/miro_emergency',platform_control,queue_size=0)
+
+        rospy.init_node("movement_publisher")
+        topic_base_name = "/" + os.getenv("MIRO_ROBOT_NAME")
+        self.vel_pub = rospy.Publisher(
+            topic_base_name + "/control/cmd_vel", TwistStamped, queue_size=0
+        )
+
+        self.pub_platform_control = rospy.Publisher(self.topic_root + "/platform/control", platform_control, queue_size=0)
+        # Clean-up
+        rospy.on_shutdown(self.shutdown_hook)
+
+
+
+    def set_move_cmd(self, linear, angular):
+        # Option 1; publish to /cmd_vel topic, which is regular
+        vel_cmd = TwistStamped()
+        vel_cmd.twist.linear.x = linear
+        vel_cmd.twist.angular.z = angular
+        self.vel_pub.publish(vel_cmd)
+
+    
+    def set_move_cmd_platformctrl(self):
+        #Option 2; publish to /platform_control, aligns with everything else
+        stop_msg = platform_control() 
+        stop_msg.body_vel = Twist() # Linear and angular velocities set to 0
+        self.platform_control_pub.publish(stop_msg) 
+        
+
+    def shutdown_hook(self):
+        # Stop moving
+        self.set_move_cmd()
+
     
     ## Function that sets the parameters of the structure platform_control corresponding to action "Stop"
     def miro_emergency(self):
@@ -51,6 +85,10 @@ class EmergencyStop():
         self.vel_pub = rospy.Publisher(
             topic_base_name + "/control/cmd_vel", TwistStamped, queue_size=0
         )
+
+        ########################################################################
+
+
         
         while True:
             try:
@@ -74,6 +112,13 @@ class EmergencyStop():
        
 
 if __name__== '__main__':
-    rospy.init_node('stop', disable_signals=True)
+    # rospy.init_node('stop', disable_signals=True)
+    # stop = EmergencyStop()
+    # stop.miro_emergency()
     stop = EmergencyStop()
-    stop.miro_emergency()
+    # stop.set_move_cmd(linear=0.0, angular=0.0)
+    stop.set_move_cmd_platformctrl()
+
+    # while not rospy.is_shutdown():  # While this node is still running... (should this even be here?)
+    #     stop.set_move_cmd(linear=0.0, angular=0.0) # MiRo should stop moving
+    #     rospy.sleep(0.02)

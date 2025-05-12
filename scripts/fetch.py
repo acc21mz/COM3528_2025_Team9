@@ -2,33 +2,24 @@
 
 import os
 import subprocess
-from math import radians  # This is used to reset the head pose
-import numpy as np  # Numerical Analysis library
-import cv2  # Computer Vision library
+from math import radians  
+import numpy as np  
+import cv2  
 
-import rospy  # ROS Python interface
-from sensor_msgs.msg import CompressedImage  # ROS CompressedImage message
-from sensor_msgs.msg import JointState  # ROS joints state message
-from cv_bridge import CvBridge, CvBridgeError  # ROS -> OpenCV converter
-from geometry_msgs.msg import TwistStamped  # ROS cmd_vel (velocity control) message
-
-import miro2 as miro  # Import MiRo Developer Kit library
-
-try:  # For convenience, import this util separately
-    from miro2.lib import wheel_speed2cmd_vel  # Python 3
-except ImportError:
-    from miro2.utils import wheel_speed2cmd_vel  # Python 2
-
+import rospy 
+from sensor_msgs.msg import CompressedImage 
+from sensor_msgs.msg import JointState
+from cv_bridge import CvBridge, CvBridgeError 
+from geometry_msgs.msg import TwistStamped  
+import miro2 as miro 
+from miro2.lib import wheel_speed2cmd_vel
 """
 fetch.py implements the action corresponding to the "fetch" command
 MiRo responds by identifying a nearby object and then moving towards it until it touches it
 """
 
 class Fetch():
-    """
-    Script settings below
-    """
-    ##########################
+    
     TICK = 0.02  # This is the update interval for the main control loop in secs
     CAM_FREQ = 1  # Number of ticks before camera gets a new frame, increase in case of network lag
     SLOW = 0.1  # Radial speed when turning on the spot (rad/s)

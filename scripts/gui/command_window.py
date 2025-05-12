@@ -10,9 +10,12 @@ class CommandWindow:
         self.root.title("MiRo Command Interface")
         
         # Initialize ROS node and publisher
-        rospy.init_node('command_gui', anonymous=True)
-        self.pub = rospy.Publisher('/miro/sim01/speech_to_text', String, queue_size=1)
         
+        rospy.init_node('command_gui', anonymous=True)
+        self.robot_name = rospy.get_param ( '/robot_name', 'sim01')
+        self.topic_root = "/miro/" + self.robot_name
+        self.pub = rospy.Publisher(self.topic_root + '/speech_to_text', String, queue_size=1)
+    
         # Create command buttons
         self.create_buttons()
         
@@ -28,14 +31,12 @@ class CommandWindow:
         action_frame.pack(padx=10, pady=5, fill="x")
         
         commands = [
-            ("Sleep", "sleep"),
-            ("Bad", "bad"),
-            ("Play", "play"),
+            ("Play Dead", "play dead"),
+            ("Stop", "stop"),
+            ("Fetch", "fetch"),
             ("Follow me", "follow me"),
-            ("Good", "good"),
             ("Speak", "speak"),
             ("Fetch", "fetch"),
-            ("Stop", "stop")
         ]
         
         for text, cmd in commands:

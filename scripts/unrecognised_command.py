@@ -1,9 +1,9 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import rospy
-from std_msgs.msg import String, Int8
-import subprocess
+from std_msgs.msg import String, Int8, Int16MultiArray
 import os
+import numpy as np
 
 class UnrecognisedCommand:
     def __init__(self):
@@ -11,7 +11,10 @@ class UnrecognisedCommand:
         self.pub_speak = rospy.Publisher('/tts', String, queue_size=1, latch=True)
         self.pub_platform_control = rospy.Publisher('/miro/platform/control', String, queue_size=1, latch=True)
         self.pub_sound = rospy.Publisher('/miro/sound/command', Int8, queue_size=1, latch=True)
-        self.beep_path = os.path.join(os.path.dirname(__file__), '../beep-warning-6387.mp3')
+        self.robot_name = os.getenv('MIRO_ROBOT_NAME', 'miro')
+        self.stream_topic = f'/{self.robot_name}/control/stream'
+        self.beep_pcm_path = os.path.join(os.path.dirname(__file__), '../beep-warning-6387.raw')
+        self.pub_stream = rospy.Publisher(self.stream_topic, Int16MultiArray, queue_size=1)
         rospy.Subscriber('/unrecognised_command_trigger', String, self.trigger_callback)
 
     def trigger_callback(self, msg):
@@ -26,10 +29,20 @@ class UnrecognisedCommand:
         q.data = "Unrecognised command response."
         self.pub_platform_control.publish(q)
 
-        # Play the custom beep sound file
-        subprocess.Popen(['mpg123', self.beep_path])
+        print("Streaming sound to:", self.stream_topic)
+        if not os.path.isfile(self.beep_pcm_path):
+            print(f"PCM file not found: {self.beep_pcm_path}")
+            return
+        with open(self.beep_pcm_path, 'rb') as f:
+            data = np.frombuffer(f.read(), dtype=np.int16)
+        chunk_size = 1024
+        for i in range(0, len(data), chunk_size):
+            msg = Int16MultiArray()
+            msg.data = data[i:i+chunk_size].tolist()
+            self.pub_stream.publish(msg)
+            rospy.sleep(0.01)
 
-        rospy.loginfo("Published unrecognised command response and sound.")
+        rospy.loginfo("Published unrecognised command response and streamed sound.")
         rospy.sleep(2)
 
 if __name__ == '__main__':
