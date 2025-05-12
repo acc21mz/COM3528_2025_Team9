@@ -3,9 +3,10 @@
 import rospy
 from std_msgs.msg import String
 import speech_recognition as sr
+import os
 
 def listen_and_publish():
-    robot_name = rospy.get_param('/robot_name', 'sim01')
+    robot_name = os.getenv("MIRO_ROBOT_NAME", "miro")
     topic_root = "/miro/" + robot_name
     rospy.init_node('speech_to_text_node', anonymous=True)
     pub = rospy.Publisher(topic_root + '/speech_to_text', String, queue_size=10)
