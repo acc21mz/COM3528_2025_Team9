@@ -4,6 +4,12 @@
 
 <param name = "rate" value="200" />
 
+<node name="play dead" pkg="cogbiogroup9" type="play_dead.py"/>
+<node name="stop" pkg="cogbiogroup9" type="emergency_stop.py"/>
+<node name="fetch" pkg="cogbiogroup9" type="fetch.py"/>
+<node name="follow me" pkg="cogbiogroup9" type="follow_me.py"/>
+<node name="speak" pkg="cogbiogroup9" type="speak.py"/>
+<node name="unrecognised command" pkg="cogbiogroup9" type="unrecognised_command.py"/>
 <node name="miro_play_dead" pkg="cogbiogroup9" type="play_dead.py"/>
 <node name="miro_stop" pkg="cogbiogroup9" type="emergency_stop.py"/>
 <node name="miro_fetch" pkg="cogbiogroup9" type="fetch.py"/>

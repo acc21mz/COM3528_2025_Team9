@@ -141,6 +141,13 @@ class CommandRecognition():
                 self.pub_platform_control.publish(q)  
                 print("speak")
 
+            # handle unrecognised command (when active and not empty and not in valid commands)
+            valid_commands = [
+                "Miro", "miro", "Fetch","fetch", "Follow Me", "follow me", "play dead", "Play dead", "Speak", "speak"]
+            cmd = self.command.strip()
+            if self.activate and cmd and cmd not in valid_commands:
+                print(f"Unrecognised command: {cmd}")
+                self.unrecognised_pub.publish(String(data=cmd))
             r.sleep()
 
 if __name__== '__main__':
