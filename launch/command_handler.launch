@@ -14,8 +14,8 @@
 <arg name="s_limit_min" default="230" doc="High saturation for vividness" />
 <arg name="s_limit_max" default="255" />
 
-<arg name="v_limit_min" default="230" doc="High brightness for visibility" />
-<arg name="v_limit_max" default="255" />
+<arg name="v_limit_min" default="100" doc="High brightness for visibility" />
+<arg name="v_limit_max" default="110" />
 
 <!-- HANDLING COMMANDS -->
 
