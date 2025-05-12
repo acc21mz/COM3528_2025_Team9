@@ -18,7 +18,7 @@ class PlayDead():
 
         ## Node rate
         self.rate = rospy.get_param('rate',10)
-        self.robot_name = os.getenv("MIRO_ROBOT_NAME")
+        self.robot_name = os.getenv("MIRO_ROBOT_NAME", "miro")
         self.pub_kinematic = rospy.Publisher(f'/{self.robot_name}/control/kinematic_joints', JointState, queue_size=0)
         self.pub_cosmetic = rospy.Publisher(f'/{self.robot_name}/control/cosmetic_joints', Float32MultiArray, queue_size=0)
         rospy.Subscriber('/miro/control',String, self.control_callback)
