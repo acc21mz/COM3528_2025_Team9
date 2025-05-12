@@ -36,7 +36,7 @@ class PlayDead():
             self.kin_joints.name = ["tilt", "lift", "yaw", "pitch"]
             self.kin_joints.position = [0.0, radians(0), 0.0, 0.0]
             #self.cos_joints.name = ["droop", "wag", "eyel", "eyer", "earl", "earr"]
-            self.cos_joints.data = [1.0, 0.0, 1.0, 1.0, -0.5, -0.5]
+            self.cos_joints.data = [-1.0, 0.0, 1.0, 1.0, -0.5, -0.5]
             self.pub_kinematic.publish(self.kin_joints)
             self.pub_cosmetic.publish(self.cos_joints)
         except KeyboardInterrupt:
