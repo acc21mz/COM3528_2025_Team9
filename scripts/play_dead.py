@@ -36,14 +36,14 @@ class PlayDead():
         self.cos_joints = Float32MultiArray()  # Prepare the empty message
         try:
             self.kin_joints.name = ["tilt", "lift", "yaw", "pitch"]
-            self.kin_joints.position = [0.0, radians(50.0), 0.0, 0.0]
+            self.kin_joints.position = [0.0, radians(40.0), 0.0, 0.0]
             #self.cos_joints.name = ["droop", "wag", "eyel", "eyer", "earl", "earr"]
             self.cos_joints.data = [0.0, 0.0, 1.0, 1.0, -0.5, -0.5]
             self.pub_kinematic.publish(self.kin_joints)
             self.pub_cosmetic.publish(self.cos_joints)
         except KeyboardInterrupt:
             print("KeyboardInterrupt: Stopping the play dead action.")                
-        r.sleep(5)
+        r.sleep(2)
 
 if __name__== '__main__':
     rospy.init_node('miro_play_dead', disable_signals=True)
