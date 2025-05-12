@@ -25,7 +25,7 @@ class Speak():
         self.rate = rospy.get_param('rate', 10)
         self.robot_name = os.getenv('MIRO_ROBOT_NAME', 'miro')
         self.stream_topic = f'/{self.robot_name}/control/stream'
-        self.bark_pcm_path = os.path.join(os.path.dirname(__file__), '../bark.wav')
+        self.bark_pcm_path = os.path.join(os.path.dirname(__file__), '../bark_miro.wav')
         self.pub_stream = rospy.Publisher(self.stream_topic, Int16MultiArray, queue_size=1)
         self.pub_speak = rospy.Publisher('/tts', String, queue_size=1, latch=True)
         rospy.Subscriber('/miro/control', String, self.control_callback)
