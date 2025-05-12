@@ -1,13 +1,13 @@
 <launch>
 
-<param name="/robot_name" value="dia-miro12" />
+<param name="/robot_name" value="dia-miro6" />
 
 <param name = "rate" value="200" />
 
-<node name="play dead" pkg="cogbiogroup9" type="play_dead.py"/>
-<node name="stop" pkg="cogbiogroup9" type="emergency_stop.py"/>
-<node name="fetch" pkg="cogbiogroup9" type="fetch.py"/>
-<node name="follow me" pkg="cogbiogroup9" type="follow_me.py"/>
-<node name="speak" pkg="cogbiogroup9" type="speak.py"/>
+<node name="miro_play_dead" pkg="cogbiogroup9" type="play_dead.py"/>
+<node name="miro_stop" pkg="cogbiogroup9" type="emergency_stop.py"/>
+<node name="miro_fetch" pkg="cogbiogroup9" type="fetch.py"/>
+<node name="miro_follow_me" pkg="cogbiogroup9" type="follow_me.py"/>
+<node name="miro_speak" pkg="cogbiogroup9" type="speak.py"/>
 
 </launch>

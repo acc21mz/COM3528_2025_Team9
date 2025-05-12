@@ -1,7 +1,7 @@
 <launch>
 
 <!--param name="/robot_name" value="sim01" /-->
-<param name="/robot_name" value="dia-miro12" />
+<param name="/robot_name" value="dia-miro6" />
 
 <!-- NODE RATE-->
 <param name = "rate" value="200" />

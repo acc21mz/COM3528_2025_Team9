@@ -10,7 +10,7 @@ class CommandWindow:
         self.root.title("MiRo Command Interface")
         
         rospy.init_node('command_gui', anonymous=True)
-        self.robot_name = rospy.get_param ( '/robot_name', 'dia-miro12')
+        self.robot_name = rospy.get_param ( '/robot_name', 'dia-miro6')
         self.topic_root = "/miro/" + self.robot_name
         self.pub = rospy.Publisher(self.topic_root + '/speech_to_text', String, queue_size=1)
     
