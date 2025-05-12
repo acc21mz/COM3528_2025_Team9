@@ -395,13 +395,14 @@ class Fetch():
         Callback function executed upon receiving a control message
         """
         if msg.data.strip().lower() == "fetch":
+            rospy.loginfo("MiRo has started fetching the ball")
             self.loop()
 
     def loop(self):
         """
         Main control loop
         """
-        print("MiRo plays ball, press CTRL+C to halt...")
+        rospy.loginfo("MiRo plays ball, press CTRL+C to halt...")
         # Main control loop iteration counter
         self.counter = 0
         # This switch loops through MiRo behaviours:
