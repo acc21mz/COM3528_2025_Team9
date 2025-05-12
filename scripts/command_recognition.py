@@ -23,25 +23,28 @@ class CommandRecognition:
         print(f"🗣️ Heard: {self.command}")
         if self.command == "miro" or self.command == "myra":
             self.activate = True
-        elif self.activate:
-            if self.command in ["play dead", "play dad"]:
-                self.pub_control.publish("play_dead")
-                print("Play dead")
-            elif self.command == "stop":
-                self.pub_control.publish("stop")
-                print("Stop")
-            elif self.command == "fetch":
-                self.pub_control.publish("fetch")
-                print("fetch")
-            elif self.command == "follow me":
-                self.pub_control.publish("follow_me")
-                print("follow me")
-            elif self.command == "speak":
-                self.pub_control.publish("speak")
-                print("speak")
-        elif self.activate ==False and self.command != "miro" and self.command != "myra":
-                print(f"Unrecognised command: {self.command}")
-                self.pub_control.publish("unrecognised:" + self.command)
+            if self.activate:
+                if self.command in ["play dead", "play dad"]:
+                    self.pub_control.publish("play_dead")
+                    print("Play dead")
+                elif self.command == "stop":
+                    self.pub_control.publish("stop")
+                    print("Stop")
+                elif self.command == "fetch":
+                    self.pub_control.publish("fetch")
+                    print("fetch")
+                elif self.command == "follow me":
+                    self.pub_control.publish("follow_me")
+                    print("follow me")
+                elif self.command == "speak":
+                    self.pub_control.publish("speak")
+                    print("speak")
+                else:
+                    print(f"Unrecognised command: {self.command}")
+                    self.pub_control.publish("unrecognised:" + self.command)
+        else:
+            print(f"Unrecognised command: {self.command}")
+            self.pub_control.publish("unrecognised:" + self.command)
         self.activate = False
 
     def switching_commands(self):
