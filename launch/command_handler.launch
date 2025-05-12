@@ -1,7 +1,7 @@
 <launch>
 
-<param name="/robot_name" value="sim01" />
-<!--param name="/robot_name" value="dia-miro12" /-->
+<!--param name="/robot_name" value="sim01" /-->
+<param name="/robot_name" value="dia-miro12" />
 
 <!-- NODE RATE-->
 <param name = "rate" value="200" />
@@ -15,8 +15,6 @@
 <arg name="s_limit_min" default="150" doc="The minimum allowed field value Saturation" />
 <arg name="v_limit_max" default="209" doc="The maximum allowed field value Value" />
 <arg name="v_limit_min" default="150" doc="The minimum allowed field value Value" />
-
-
 <!-- HANDLING COMMANDS -->
 
 <!-- <node name="command_activation" pkg="command_handler" type="command_activation.py" /> -->
@@ -29,8 +27,8 @@
 <node pkg="cogbiogroup9" type="speech_to_text_node.py" name="speech_to_text_node" output="screen"/>
 
 <!-- ACTIONS: WE NEED TO IMPLEMENT THIS --> 
-<!-- <include file="$(find actions)/launch/actions.launch" />
-<include file="$(find actions)/launch/double_hough_circles.launch" />
+<include file="$(find actions)/launch/actions.launch" />
+<!-- <include file="$(find actions)/launch/double_hough_circles.launch" />
 <include file="$(find actions)/launch/double_hsv_color_filter.launch" /> -->
 
 </launch>

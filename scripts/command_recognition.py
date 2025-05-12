@@ -11,7 +11,7 @@ from geometry_msgs.msg import Twist,Pose
 
 #only when testing on real miro uncomment these
 import miro_msgs
-from miro2_msgs.msg import platform_control
+from miro_msgs.msg import platform_control
 from miro_constants import miro
 import opencv_apps
 from opencv_apps.msg import CircleArrayStamped
@@ -27,8 +27,8 @@ class CommandRecognition():
         self.rate = rospy.get_param('rate',200)
 
         ## Allow to switch from real robot to simulation from launch file
-        #self.robot_name = rospy.get_param ( '/robot_name', 'dia-miro12')
-        self.robot_name = rospy.get_param ( '/robot_name', 'sim01')
+        self.robot_name = rospy.get_param ( '/robot_name', 'dia-miro12')
+        #self.robot_name = rospy.get_param ( '/robot_name', 'sim01')
         self.topic_root = "/miro/" + self.robot_name
         print("topic_root", self.topic_root)
 
@@ -57,8 +57,8 @@ class CommandRecognition():
     
     ## Callback function that receive and save the user's voice command as text
     def callback_receive_command(self, text):
-        self.command = text.data
-        print(f"🗣️ Heard: {text.data}")
+        self.command = str(text.data).lower()
+        print(f"🗣️ Heard: {self.command}")
     
     def callback_play_dead_action(self, play_dead):
         self.q_play_dead = play_dead
@@ -72,7 +72,7 @@ class CommandRecognition():
         self.q_fetch.body_config_speed = [0.0,-1.0,-1.0,-1.0]
     
     def callback_follow_me_action(self, follow_me):
-        self.q_good = follow_me
+        self.q_follow_me = follow_me
     
     def callback_speak_action(self, speak):
 
@@ -129,10 +129,9 @@ class CommandRecognition():
 
             # follow me
             elif self.activate and (self.command == "follow me" or self.command == "Follow Me"):
-                count_bad = 0
+                q = self.q_follow_me
                 q.body_config = [0.0,0.0,0.0,0.0]
                 q.body_config_speed = [0.0,-1.0,-1.0,-1.0]
-                q = self.q_gbb
                 self.pub_platform_control.publish(q)  
                 print("follow me")
 
