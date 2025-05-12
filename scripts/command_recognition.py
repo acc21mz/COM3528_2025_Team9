@@ -126,6 +126,7 @@ class CommandRecognition():
             elif self.activate and (self.command == "Fetch" or self.command == "fetch"):
                 q = self.q_fetch
                 self.pub_platform_control.publish(q)
+                print("fetch")
 
             # follow me
             elif self.activate and (self.command == "follow me" or self.command == "Follow Me"):

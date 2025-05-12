@@ -5,8 +5,8 @@ from std_msgs.msg import String, UInt16MultiArray, Int16MultiArray, Int8
 from sensor_msgs.msg import Image, CompressedImage, Range, Imu
 from geometry_msgs.msg import Twist, Pose
 
-# import miro_msgs
-# from miro_msgs.msg import platform_config, platform_sensors, platform_state, platform_mics, platform_control, core_state, core_control, core_config, bridge_config, bridge_stream
+import miro_msgs
+from miro_msgs.msg import platform_config, platform_sensors, platform_state, platform_mics, platform_control, core_state, core_control, core_config, bridge_config, bridge_stream
 
 # import opencv_apps
 # from opencv_apps.msg import CircleArrayStamped
@@ -15,7 +15,7 @@ import math
 import numpy as np
 import time
 import sys
-# from miro_constants import miro
+from miro_constants import miro
 import os
 from datetime import datetime
 import subprocess
@@ -86,7 +86,7 @@ class Speak():
         chunk_size = 1024
         for i in range(0, len(self.data), chunk_size):
             msg = Int16MultiArray()
-            msg.data = self.data[i:i+chunk_size].tolist()
+            msg.data = self.data[i:i+chunk_size]
             self.pub_stream.publish(msg)
             rospy.sleep(0.01)
 
