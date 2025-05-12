@@ -13,7 +13,7 @@ class UnrecognisedCommand:
         self.pub_sound = rospy.Publisher('/miro/sound/command', Int8, queue_size=1, latch=True)
         self.robot_name = os.getenv('MIRO_ROBOT_NAME', 'miro')
         self.stream_topic = f'/{self.robot_name}/control/stream'
-        self.beep_pcm_path = os.path.join(os.path.dirname(__file__), '../beep-warning-6387.raw')
+        self.beep_pcm_path = os.path.join(os.path.dirname(__file__), '../beep-warning-6387.wav')
         self.pub_stream = rospy.Publisher(self.stream_topic, Int16MultiArray, queue_size=1)
         rospy.Subscriber('/unrecognised_command_trigger', String, self.trigger_callback)
 
