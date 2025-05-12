@@ -1,33 +1,28 @@
 #!/usr/bin/env python3
 
 import rospy
-from std_msgs.msg import String, Int8, Int16MultiArray
+from std_msgs.msg import String, Int16MultiArray
 import os
 import numpy as np
 
 class UnrecognisedCommand:
     def __init__(self):
         self.rate = rospy.get_param('rate', 10)
-        self.pub_speak = rospy.Publisher('/tts', String, queue_size=1, latch=True)
-        self.pub_platform_control = rospy.Publisher('/miro/platform/control', String, queue_size=1, latch=True)
-        self.pub_sound = rospy.Publisher('/miro/sound/command', Int8, queue_size=1, latch=True)
         self.robot_name = os.getenv('MIRO_ROBOT_NAME', 'miro')
         self.stream_topic = f'/{self.robot_name}/control/stream'
         self.beep_pcm_path = os.path.join(os.path.dirname(__file__), '../beep-warning-6387.wav')
         self.pub_stream = rospy.Publisher(self.stream_topic, Int16MultiArray, queue_size=1)
-        rospy.Subscriber('/unrecognised_command_trigger', String, self.trigger_callback)
+        self.pub_speak = rospy.Publisher('/tts', String, queue_size=1, latch=True)
+        rospy.Subscriber('/miro/control', String, self.control_callback)
 
-    def trigger_callback(self, msg):
-        self.unrecognised_response()
+    def control_callback(self, msg):
+        if msg.data.startswith('unrecognised:'):
+            self.unrecognised_response()
 
     def unrecognised_response(self):
         msg = String()
         msg.data = "I don't understand"
         self.pub_speak.publish(msg)
-
-        q = String()
-        q.data = "Unrecognised command response."
-        self.pub_platform_control.publish(q)
 
         print("Streaming sound to:", self.stream_topic)
         if not os.path.isfile(self.beep_pcm_path):
