@@ -21,7 +21,7 @@ class CommandRecognition:
     def speech_callback(self, msg):
         self.command = msg.data.strip().lower()
         print(f"🗣️ Heard: {self.command}")
-        if self.command == "miro" or self.command == "myra":
+        if "miro" in self.command or "myra" in self.command:
             self.activate = True
             if self.activate:
                 if self.command in ["play dead", "play dad"]:
