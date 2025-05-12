@@ -27,16 +27,16 @@ class CommandRecognition:
                 if self.command in ["play dead", "play dad"]:
                     self.pub_control.publish("play_dead")
                     print("Play dead")
-                elif self.command == "stop":
+                elif "stop" in self.command:
                     self.pub_control.publish("stop")
                     print("Stop")
-                elif self.command == "fetch":
+                elif "fetch" in self.command:
                     self.pub_control.publish("fetch")
                     print("fetch")
-                elif self.command == "follow me":
+                elif "follow me" in self.command:
                     self.pub_control.publish("follow_me")
                     print("follow me")
-                elif self.command == "speak":
+                elif "speak" in self.command:
                     self.pub_control.publish("speak")
                     print("speak")
                 elif self.command != "miro" and self.command != "myra":
