@@ -39,7 +39,7 @@ class CommandRecognition:
                 elif self.command == "speak":
                     self.pub_control.publish("speak")
                     print("speak")
-                else:
+                elif self.command != "miro" and self.command != "myra":
                     print(f"Unrecognised command: {self.command}")
                     self.pub_control.publish("unrecognised:" + self.command)
         else:
