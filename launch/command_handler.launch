@@ -8,10 +8,10 @@
 
 <!-- BALL COLOR -->
 
-<arg name="h_limit_min" default="20" doc="Hue: yellow-green start" />
-<arg name="h_limit_max" default="40" doc="Hue: yellow-green end" />
+<arg name="h_limit_min" default="70" doc="Hue: yellow-green start" />
+<arg name="h_limit_max" default="80" doc="Hue: yellow-green end" />
 
-<arg name="s_limit_min" default="200" doc="High saturation for vividness" />
+<arg name="s_limit_min" default="230" doc="High saturation for vividness" />
 <arg name="s_limit_max" default="255" />
 
 <arg name="v_limit_min" default="230" doc="High brightness for visibility" />

@@ -29,6 +29,7 @@ def listen_and_publish():
             print(f"✅ You said: {text}")
             rospy.loginfo(f"[STT] Publishing: {text}")
             pub.publish(String(data=text))
+            rospy.sleep(5)  # Sleep to allow for message processing
         except sr.UnknownValueError:
             print("❌ Could not understand audio.")
         except sr.RequestError as e:
