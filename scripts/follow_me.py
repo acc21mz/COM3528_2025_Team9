@@ -11,7 +11,7 @@ from cv_bridge import CvBridge
 
 class FollowMe:
     def __init__(self):
-        rospy.init_node('follow_me', anonymous=False)
+        rospy.init_node('miro_follow_me', anonymous=False)
 
         # Parameters
         self.rate_hz = rospy.get_param('~rate', 200)
@@ -147,7 +147,7 @@ class FollowMe:
                 self.loop_rate.sleep()
         except KeyboardInterrupt:
             print("KeyboardInterrupt: Stopping the emergency stop action.")               
-            rospy.kill_node('follow_me')
+            rospy.kill_node('miro_follow_me')
 
 if __name__ == '__main__':
     node = FollowMe()

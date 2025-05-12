@@ -61,6 +61,6 @@ class EmergencyStop():
        
 
 if __name__== '__main__':
-    rospy.init_node('stop', disable_signals=True)
+    rospy.init_node('miro_stop', disable_signals=True)
     stop = EmergencyStop()
     rospy.spin()

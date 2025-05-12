@@ -343,7 +343,7 @@ class Fetch():
     def __init__(self):
         # Initialise a new ROS node to communicate with MiRo, if needed
         if not self.IS_MIROCODE:
-            rospy.init_node("fetch", anonymous=True)
+            rospy.init_node("miro_fetch", anonymous=True)
         # Give it some time to make sure everything is initialised
         rospy.sleep(2.0)
         # Initialise CV Bridge

@@ -4,7 +4,7 @@
 
 <param name = "rate" value="200" />
 
-<node name="unrecognised command" pkg="cogbiogroup9" type="unrecognised_command.py"/>
+<node name="miro_unrecognised_command" pkg="cogbiogroup9" type="unrecognised_command.py"/>
 <node name="miro_play_dead" pkg="cogbiogroup9" type="play_dead.py"/>
 <node name="miro_stop" pkg="cogbiogroup9" type="emergency_stop.py"/>
 <node name="miro_fetch" pkg="cogbiogroup9" type="fetch.py"/>

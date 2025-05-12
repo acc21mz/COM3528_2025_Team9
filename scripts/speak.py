@@ -52,6 +52,6 @@ class Speak():
         rospy.sleep(2)
 
 if __name__ == '__main__':
-    rospy.init_node('speak')
+    rospy.init_node('miro_speak')
     sc = Speak()
     rospy.spin()

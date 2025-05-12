@@ -46,7 +46,7 @@ class PlayDead():
         r.sleep()
 
 if __name__== '__main__':
-    rospy.init_node('play dead', disable_signals=True)
+    rospy.init_node('miro_play_dead', disable_signals=True)
     play_dead = PlayDead()
     rospy.spin()
     rospy.loginfo("Play dead node is running.")
