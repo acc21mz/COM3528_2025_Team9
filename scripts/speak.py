@@ -34,7 +34,7 @@ class Speak():
         ## Node rate
         self.rate = rospy.get_param('rate',200)
         self.pub_sound = rospy.Publisher('/miro/sound/command', Int8, queue_size=1, latch=True)
-        self.file = os.path.join(os.path.dirname(__file__), './bark.mp3')
+        self.file = os.path.join(os.path.dirname(__file__), './bark.wav')
         # file = "/home/student/pkgs/mdk-230105/catkin_ws/src/com3528_team09/cogbiogroup9/scripts/bark.wav"
         # load wav
         with open(self.file, 'rb') as f:
@@ -81,22 +81,14 @@ class Speak():
         # sound = Int8()
         # sound.data = self.data
         # self.pub_sound(sound)
-        while not rospy.core.is_shutdown():
+        # while not rospy.core.is_shutdown():
         # if we've received a report
-            if self.buffer_total > 0:
-
-                # compute amount to send
-                buffer_rem = self.buffer_total - self.buffer_space
-                n_bytes = BUFFER_STUFF_BYTES - buffer_rem
-                n_bytes = max(n_bytes, 0)
-                n_bytes = min(n_bytes, MAX_STREAM_MSG_SIZE)
-
-            # if amount to send is non-zero
-            if n_bytes > 0:
-
-                msg = Int16MultiArray(data = self.data[self.data_r:self.data_r+n_bytes])
-                self.pub_stream.publish(msg)
-                self.data_r += n_bytes
+        chunk_size = 1024
+        for i in range(0, len(self.data), chunk_size):
+            msg = Int16MultiArray()
+            msg.data = self.data[i:i+chunk_size].tolist()
+            self.pub_stream.publish(msg)
+            rospy.sleep(0.01)
 
         rospy.sleep(2)
 if __name__ == "__main__":
