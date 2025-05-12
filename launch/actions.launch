@@ -1,6 +1,6 @@
 <launch>
 
-<param name="/robot_name" value="dia-miro6" />
+<param name="/robot_name" value="dia-miro37" />
 
 <param name = "rate" value="200" />
 
