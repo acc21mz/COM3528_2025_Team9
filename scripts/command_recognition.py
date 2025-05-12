@@ -5,6 +5,7 @@ from std_msgs.msg import String
 import os
 from sensor_msgs.msg import JointState
 from std_msgs.msg import Float32MultiArray
+from math import radians
 class CommandRecognition:
     def __init__(self):
         self.rate = rospy.get_param('rate', 200)
@@ -21,7 +22,12 @@ class CommandRecognition:
         self.pub_cosmetic = rospy.Publisher(f'/{self.robot_name}/control/cosmetic_joints', Float32MultiArray, queue_size=0)
         # Subscriber to speech-to-text
         rospy.Subscriber(self.topic_root + '/speech_to_text', String, self.speech_callback, queue_size=1)
-
+        self.kin_joints = JointState()  # Prepare the empty message
+        self.cos_joints = Float32MultiArray()  # Prepare the empty message
+        self.kin_joints.name = ["tilt", "lift", "yaw", "pitch"]
+        self.kin_joints.position = [0.0, radians(0.0), 0.0, 0.0]
+        self.cos_joints.data = [0.0, 0.0, 0.0, 0.0, -0.0, -0.0]
+        
     def speech_callback(self, msg):
         self.command = msg.data.strip().lower()
         print(f"🗣️ Heard: {self.command}")
