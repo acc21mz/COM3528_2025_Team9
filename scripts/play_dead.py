@@ -3,7 +3,7 @@
 import rospy
 from std_msgs.msg import String
 from sensor_msgs.msg import Image, CompressedImage, Range, Imu
-from std_msgs.msg import FloatMultiArray
+from std_msgs.msg import Float32MultiArray
 from geometry_msgs.msg import Twist, Pose
 from datetime import datetime
 from sensor_msgs.msg import JointState
@@ -21,11 +21,11 @@ class PlayDead():
         self.robot_name = os.getenv('MIRO_ROBOT_NAME', 'miro')
         self.kinematic_control_topic = f'/{self.robot_name}/sensors/kinematic_joints'
         self.pub_kinematic = rospy.Publisher(self.kinematic_control_topic, JointState, queue_size=1)
-        self.pub_cosmetic = rospy.Publisher('/miro/control/cosmetic_joints', FloatMultiArray, queue_size=1)
+        self.pub_cosmetic = rospy.Publisher(f'{self.robot_name}/control/cosmetic_joints', Float32MultiArray, queue_size=1)
         rospy.Subscriber('/miro/control',String, self.control_callback)
         
     def control_callback(self, msg):
-        if 'play dead' in msg.data:
+        if msg.data.strip().lower() == "play dead":
             self.miro_dead()
             print("Received command to play dead")
     
@@ -33,12 +33,12 @@ class PlayDead():
 
         r = rospy.Rate(self.rate)
         self.kin_joints = JointState()  # Prepare the empty message
-        self.cos_joints = FloatMultiArray()  # Prepare the empty message
+        self.cos_joints = Float32MultiArray()  # Prepare the empty message
         try:
             self.kin_joints.name = ["tilt", "lift", "yaw", "pitch"]
             self.kin_joints.position = [0.0, radians(0), 0.0, 0.0]
-            self.cos_joints.name = ["droop", "wag", "eyel", "eyer", "earl", "earr"]
-            self.cos_joints.data = [1.0, 0.0, 0.0, 0.0, -1.0, -1.0]
+            #self.cos_joints.name = ["droop", "wag", "eyel", "eyer", "earl", "earr"]
+            self.cos_joints.data = [1.0, 0.0, 1.0, 1.0, -0.5, -0.5]
             self.pub_kinematic.publish(self.kin_joints)
             self.pub_cosmetic.publish(self.cos_joints)
         except KeyboardInterrupt:
@@ -49,4 +49,4 @@ if __name__== '__main__':
     rospy.init_node('miro_play_dead', disable_signals=True)
     play_dead = PlayDead()
     rospy.spin()
-    rospy.loginfo("Play dead node is running.")
+    

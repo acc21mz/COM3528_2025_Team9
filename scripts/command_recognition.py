@@ -21,11 +21,11 @@ class CommandRecognition:
     def speech_callback(self, msg):
         self.command = msg.data.strip().lower()
         print(f"🗣️ Heard: {self.command}")
-        if "miro" in self.command or "myra" in self.command:
+        if "miro" in self.command or "myra" in self.command or "mero" in self.command:
             self.activate = True
             if self.activate:
-                if self.command in ["play dead", "play dad"]:
-                    self.pub_control.publish("play_dead")
+                if "play dead" in self.command or "play dad" in self.command:
+                    self.pub_control.publish("play dead")
                     print("Play dead")
                 elif "stop" in self.command:
                     self.pub_control.publish("stop")
@@ -34,7 +34,7 @@ class CommandRecognition:
                     self.pub_control.publish("fetch")
                     print("fetch")
                 elif "follow me" in self.command:
-                    self.pub_control.publish("follow_me")
+                    self.pub_control.publish("follow me")
                     print("follow me")
                 elif "speak" in self.command:
                     self.pub_control.publish("speak")
