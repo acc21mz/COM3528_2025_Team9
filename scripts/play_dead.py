@@ -26,8 +26,6 @@ class PlayDead():
     def control_callback(self, msg):
         if msg.data.strip().lower() == "play dead":
             self.miro_dead()
-            self.pub_kinematic.publish([0.0, 0.0, 0.0, 0.0])
-            self.pub_cosmetic.publish([0.0, 0.0, 0.0, 0.0, 0.0,0.0])
     
     def miro_dead(self):
 
@@ -43,7 +41,7 @@ class PlayDead():
             self.pub_cosmetic.publish(self.cos_joints)
         except KeyboardInterrupt:
             print("KeyboardInterrupt: Stopping the play dead action.")                
-        r.sleep(2)
+        r.sleep()
 
 if __name__== '__main__':
     rospy.init_node('miro_play_dead', disable_signals=True)

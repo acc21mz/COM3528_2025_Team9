@@ -3,6 +3,8 @@
 import rospy
 from std_msgs.msg import String
 import os
+from sensor_msgs.msg import JointState
+from std_msgs.msg import Float32MultiArray
 class CommandRecognition:
     def __init__(self):
         self.rate = rospy.get_param('rate', 200)
@@ -15,6 +17,8 @@ class CommandRecognition:
 
         # Publisher for control commands as strings
         self.pub_control = rospy.Publisher('/miro/control', String, queue_size=1)
+        self.pub_kinematic = rospy.Publisher(f'/{self.robot_name}/control/kinematic_joints', JointState, queue_size=0)
+        self.pub_cosmetic = rospy.Publisher(f'/{self.robot_name}/control/cosmetic_joints', Float32MultiArray, queue_size=0)
         # Subscriber to speech-to-text
         rospy.Subscriber(self.topic_root + '/speech_to_text', String, self.speech_callback, queue_size=1)
 
@@ -50,6 +54,8 @@ class CommandRecognition:
     def switching_commands(self):
         r = rospy.Rate(self.rate)
         while not rospy.is_shutdown():
+            self.pub_kinematic.publish([0.0, 0.0, 0.0, 0.0])
+            self.pub_cosmetic.publish([0.0, 0.0, 0.0, 0.0, 0.0,0.0])
             r.sleep()
 
 
