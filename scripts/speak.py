@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import rospy
-from std_msgs.msg import String, UInt16MultiArray, Int16MultiArray
+from std_msgs.msg import String, UInt16MultiArray, Int16MultiArray, Int8
 from sensor_msgs.msg import Image, CompressedImage, Range, Imu
 from geometry_msgs.msg import Twist, Pose
 
@@ -18,6 +18,7 @@ import sys
 # from miro_constants import miro
 import os
 from datetime import datetime
+import subprocess
 
 
 """
@@ -32,13 +33,15 @@ class Speak():
 
         ## Node rate
         self.rate = rospy.get_param('rate',200)
-        file = "/home/student/pkgs/mdk-230105/catkin_ws/src/com3528_team09/cogbiogroup9/scripts/bark.wav"
+        self.pub_sound = rospy.Publisher('/miro/sound/command', Int8, queue_size=1, latch=True)
+        self.file = os.path.join(os.path.dirname(__file__), './bark.mp3')
+        # file = "/home/student/pkgs/mdk-230105/catkin_ws/src/com3528_team09/cogbiogroup9/scripts/bark.wav"
         # load wav
-        with open(file, 'rb') as f:
+        with open(self.file, 'rb') as f:
             dat = f.read()
-        self.data_r = 0
+    
 
-        # convert to numpy array
+        # # convert to numpy array
         dat = np.frombuffer(dat, dtype='int16').astype(np.int32)
 
         # normalise wav
@@ -63,62 +66,41 @@ class Speak():
         # subscribe
         topic = topic_base_name + "/sensors/stream"
         print ("subscribe", topic)
-        self.sub_stream = rospy.Subscriber(topic, UInt16MultiArray, self.callback_stream, queue_size=1, tcp_nodelay=True)
+        self.sub_stream = rospy.Subscriber(topic, UInt16MultiArray, self.callback_stream, queue_size=1, tcp_nodelay=True)#
 
     def callback_log(self, msg):
-
         sys.stdout.write(msg.data)
         sys.stdout.flush()
 
     def callback_stream(self, msg):
-
         self.buffer_space = msg.data[0]
         self.buffer_total = msg.data[1]
 
-    
-    def loop(self):
+    def bark(self):
+        # subprocess.Popen(['mpg123', self.file])
+        # sound = Int8()
+        # sound.data = self.data
+        # self.pub_sound(sound)
         while not rospy.core.is_shutdown():
-            #check state_file
-            # # if we've received a report
-            # if self.buffer_total > 0:
+        # if we've received a report
+            if self.buffer_total > 0:
 
-            #     # compute amount to send
-            #     buffer_rem = self.buffer_total - self.buffer_space
-            #     n_bytes = BUFFER_STUFF_BYTES - buffer_rem
-            #     n_bytes = max(n_bytes, 0)
-            #     n_bytes = min(n_bytes, MAX_STREAM_MSG_SIZE)
+                # compute amount to send
+                buffer_rem = self.buffer_total - self.buffer_space
+                n_bytes = BUFFER_STUFF_BYTES - buffer_rem
+                n_bytes = max(n_bytes, 0)
+                n_bytes = min(n_bytes, MAX_STREAM_MSG_SIZE)
 
-            #     # if amount to send is non-zero
-                # if n_bytes > 0:
+            # if amount to send is non-zero
+            if n_bytes > 0:
 
-            msg = Int16MultiArray(data = self.data)
-            self.pub_stream.publish(msg)
-            # self.data_r += n_byte
+                msg = Int16MultiArray(data = self.data[self.data_r:self.data_r+n_bytes])
+                self.pub_stream.publish(msg)
+                self.data_r += n_bytes
 
-            # break
-            if self.data_r >= len(self.data):
-                break
-
-            # # report once per second
-            # if count == 0:
-            #     count = 10
-            #     print ("streaming:", self.data_r, "/", len(self.data), "bytes")
-
-            #     # check at those moments if we are making progress, also
-            #     if dropout_data_r == self.data_r:
-            #         if dropout_count == 0:
-            #             print ("dropping out because of no progress...")
-            #             break
-            #         print ("dropping out in", str(dropout_count) + "...")
-            #         dropout_count -= 1
-            #     else:
-                    # dropout_data_r = self.data_r
-
-            # count tenths
-            # count -= 1
-            time.sleep(0.1)
+        rospy.sleep(2)
 if __name__ == "__main__":
 
-    rospy.init_node("client_stream", anonymous=True)
+    rospy.init_node("speak", anonymous=True)
     main = Speak()
-    main.loop()
+    main.bark()
