@@ -38,9 +38,9 @@ class Fetch():
     # color segmentation format
     HSV = True  # if true select a color which will convert to hsv format with a range of its own, else you can select your own rgb range
     f = lambda x: int(0) if (x < 0) else (int(255) if x > 255 else int(x))
-    COLOR_HSV = [f(71), f(100), f(100)]     # target color which will be converted to hsv for processing, format BGR
-    COLOR_LOW = (f(60), f(90), f(90))         # low color segment, format BGR
-    COLOR_HIGH = (f(85), f(110), f(110))  # high color segment, format BGR
+    COLOR_HSV = [f(0), f(255), f(216)]     # target color which will be converted to hsv for processing, format BGR
+    COLOR_LOW = (f(0), f(230), f(190))         # low color segment, format BGR
+    COLOR_HIGH = (f(15), f(255), f(255))  # high color segment, format BGR
 
     # edge detection format
     INTENSITY_LOW = 50   # min 0, max 500
@@ -65,7 +65,7 @@ class Fetch():
         """
         self.kin_joints = JointState()  # Prepare the empty message
         self.kin_joints.name = ["tilt", "lift", "yaw", "pitch"]
-        self.kin_joints.position = [0.0, radians(30.0), 0.0, 0.0]
+        self.kin_joints.position = [0.0, radians(40.0), 0.0, 0.0]
         t = 0
         while not rospy.core.is_shutdown():  # Check ROS is running
             # Publish state to neck servos for 1 sec

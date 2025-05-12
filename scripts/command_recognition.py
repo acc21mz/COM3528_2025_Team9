@@ -29,7 +29,6 @@ class CommandRecognition:
             if self.activate:
                 if "play dead" in self.command or "play dad" in self.command:
                     self.pub_control.publish("play dead")
-                    
                     print("Play dead")
                 elif "stop" in self.command:
                     self.pub_control.publish("stop")
