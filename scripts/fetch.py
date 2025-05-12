@@ -7,10 +7,11 @@ import numpy as np
 import cv2  
 
 import rospy 
-from sensor_msgs.msg import CompressedImage 
+from sensor_msgs.msg import CompressedImage
 from sensor_msgs.msg import JointState
 from cv_bridge import CvBridge, CvBridgeError 
 from geometry_msgs.msg import TwistStamped  
+from std_msgs.msg import String
 import miro2 as miro 
 from miro2.lib import wheel_speed2cmd_vel
 """
@@ -350,6 +351,7 @@ class Fetch():
         self.image_converter = CvBridge()
         # Individual robot name acts as ROS topic prefix
         topic_base_name = "/" + os.getenv("MIRO_ROBOT_NAME")
+        rospy.Subscriber("/miro/control", String, self.control_callback)
         # Create two new subscribers to receive camera images with attached callbacks
         self.sub_caml = rospy.Subscriber(
             topic_base_name + "/sensors/caml/compressed",
@@ -387,6 +389,13 @@ class Fetch():
         self.bookmark = 0
         # Move the head to default pose
         self.reset_head_pose()
+        
+    def control_callback(self, msg):
+        """
+        Callback function executed upon receiving a control message
+        """
+        if msg.data.strip().lower() == "fetch":
+            self.loop()
 
     def loop(self):
         """
@@ -425,9 +434,9 @@ class Fetch():
                 break
             rospy.sleep(self.TICK)
             
-
-
 # This condition fires when the script is called directly
 if __name__ == "__main__":
+    rospy.init_node("miro_fetch")  
     main = Fetch()  # Instantiate class
-    main.loop()  # Run the main control loop
+    rospy.spin()
+    
