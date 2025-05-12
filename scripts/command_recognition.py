@@ -39,10 +39,10 @@ class CommandRecognition:
             elif self.command == "speak":
                 self.pub_control.publish("speak")
                 print("speak")
-            else:
+        elif self.activate ==False and self.command != "miro" and self.command != "myra":
                 print(f"Unrecognised command: {self.command}")
                 self.pub_control.publish("unrecognised:" + self.command)
-            self.activate = False
+        self.activate = False
 
     def switching_commands(self):
         r = rospy.Rate(self.rate)

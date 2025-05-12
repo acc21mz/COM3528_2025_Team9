@@ -44,7 +44,7 @@ class Speak():
         chunk_size = 1024
         for i in range(0, len(data), chunk_size):
             msg = Int16MultiArray()
-            msg.data = data[i:i+chunk_size].tolist()
+            msg.data = data[i:i+chunk_size]
             self.pub_stream.publish(msg)
             rospy.sleep(0.01)
 
