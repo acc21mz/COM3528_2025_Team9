@@ -11,7 +11,6 @@ from cv_bridge import CvBridge
 
 class FollowMe:
     def __init__(self):
-        rospy.init_node('miro_follow_me', anonymous=False)
 
         # Parameters
         self.rate_hz = rospy.get_param('~rate', 200)
@@ -45,7 +44,7 @@ class FollowMe:
         rospy.Subscriber(robot + '/sensors/caml/compressed', CompressedImage, self._caml_cb, queue_size=1, tcp_nodelay=True)
         rospy.Subscriber(robot + '/sensors/camr/compressed', CompressedImage, self._camr_cb, queue_size=1, tcp_nodelay=True)
         rospy.Subscriber(robot + '/sensors/sonar', Range, self._range_cb)
-        self.pub_platform_control = rospy.Publisher(robot + "/miro/control", String, self.control_callback)
+        rospy.Subscriber("/miro/control", String, self.control_callback)
         # Publisher
         self.cmd_pub = rospy.Publisher(robot + '/control/cmd_vel', TwistStamped, queue_size=1)
 
@@ -150,6 +149,7 @@ class FollowMe:
             rospy.kill_node('miro_follow_me')
 
 if __name__ == '__main__':
+    rospy.init_node('miro_follow_me')
     node = FollowMe()
     rospy.spin()
     

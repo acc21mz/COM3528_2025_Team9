@@ -17,17 +17,15 @@ class PlayDead():
     def __init__(self):
 
         ## Node rate
-        self.rate = rospy.get_param('rate',200)
-        self.robot_name = os.getenv('MIRO_ROBOT_NAME', 'miro')
-        self.kinematic_control_topic = f'/{self.robot_name}/sensors/kinematic_joints'
-        self.pub_kinematic = rospy.Publisher(self.kinematic_control_topic, JointState, queue_size=1)
+        self.rate = rospy.get_param('rate',10)
+        self.robot_name =  "/" + os.getenv("MIRO_ROBOT_NAME")
+        self.pub_kinematic = rospy.Publisher(f'{self.robot_name}/control/kinematic_joints', JointState, queue_size=1)
         self.pub_cosmetic = rospy.Publisher(f'{self.robot_name}/control/cosmetic_joints', Float32MultiArray, queue_size=1)
         rospy.Subscriber('/miro/control',String, self.control_callback)
         
     def control_callback(self, msg):
         if msg.data.strip().lower() == "play dead":
             self.miro_dead()
-            print("Received command to play dead")
     
     def miro_dead(self):
 
