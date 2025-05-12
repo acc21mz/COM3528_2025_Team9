@@ -25,7 +25,7 @@ class Fetch():
     CAM_FREQ = 1  # Number of ticks before camera gets a new frame, increase in case of network lag
     SLOW = 0.1  # Radial speed when turning on the spot (rad/s)
     FAST = 0.4  # Linear speed when kicking the ball (m/s)
-    DEBUG = False # Set to True to enable debug views of the cameras
+    DEBUG = True # Set to True to enable debug views of the cameras
     TRANSLATION_ONLY = False # Whether to rotate only
     IS_MIROCODE = False  # Set to True if running in MiRoCODE
 
@@ -65,9 +65,9 @@ class Fetch():
         """
         self.kin_joints = JointState()  # Prepare the empty message
         self.kin_joints.name = ["tilt", "lift", "yaw", "pitch"]
-        self.kin_joints.position = [0.0, radians(40.0), 0.0, 0.0]
+        self.kin_joints.position = [0.0, radians(34.0), 0.0, 0.0]
         t = 0
-        rospy.sleep(0.5)
+        rospy.sleep(1)
         while not rospy.core.is_shutdown():  # Check ROS is running
             # Publish state to neck servos for 1 sec
             self.pub_kin.publish(self.kin_joints)
@@ -133,6 +133,7 @@ class Fetch():
         Image processing operations, fine-tuned to detect a small,
         toy blue ball in a given frame.
         """
+            
         if frame is None:  # Sanity check
             return
 
@@ -410,8 +411,9 @@ class Fetch():
         # Find ball, lock on to the ball and kick ball
         self.status_code = 0
         self.done = False
+        self.kin_joints.position = [0.0, radians(60.0),0.0,0.0]
         while not rospy.core.is_shutdown():
-
+            self.pub_kin.publish(self.kin_joints)
             # Step 1. Find ball
             if self.status_code == 1:
                 # Every once in a while, look for ball

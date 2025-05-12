@@ -3,15 +3,15 @@
 import tkinter as tk
 import rospy
 from std_msgs.msg import String
+import os
 
 class CommandWindow:
     def __init__(self):
         self.root = tk.Tk()
         self.root.title("MiRo Command Interface")
         
-        rospy.init_node('command_gui', anonymous=True)
-        self.robot_name = rospy.get_param ( '/robot_name', 'dia-miro37')
-        self.topic_root = "/miro/" + self.robot_name
+        self.robot_name = '/miro/'+os.getenv("MIRO_ROBOT_NAME")
+        self.topic_root = self.robot_name
         self.pub = rospy.Publisher(self.topic_root + '/speech_to_text', String, queue_size=1)
     
         # Create command buttons
@@ -29,12 +29,10 @@ class CommandWindow:
         action_frame.pack(padx=10, pady=5, fill="x")
         
         commands = [
-            ("Play Dead", "play dead"),
-            ("Stop", "stop"),
-            ("Fetch", "fetch"),
-            ("Follow me", "follow me"),
-            ("Speak", "speak"),
-            ("Fetch", "fetch"),
+            ("Play Dead", "miro play dead"),
+            ("Stop", "miro stop"),
+            ("Fetch", "miro fetch"),
+            ("Speak", "miro speak"),
         ]
         
         for text, cmd in commands:
@@ -52,6 +50,7 @@ class CommandWindow:
 
 if __name__ == "__main__":
     try:
+        rospy.init_node("miro_command_window")
         window = CommandWindow()
         window.run()
     except rospy.ROSInterruptException:

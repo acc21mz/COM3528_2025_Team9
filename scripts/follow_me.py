@@ -19,7 +19,7 @@ class FollowMe:
         self.stop_distance = rospy.get_param('~stop_distance', 0.3)
         self.k_ang = rospy.get_param('~angular_gain', 1.0)
         self.cam_freq = rospy.get_param('~cam_freq', 2)
-        self.debug = rospy.get_param('~debug', False)
+        self.debug = rospy.get_param('~debug', True)
 
         # CV Bridge
         self.bridge = CvBridge()
