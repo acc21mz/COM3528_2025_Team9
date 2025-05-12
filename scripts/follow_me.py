@@ -10,7 +10,6 @@ from cv_bridge import CvBridge, CvBridgeError
 
 class FollowMe:
     def __init__(self):
-        # Initialize ROS node
         rospy.init_node('follow_me', anonymous=False)
 
         # Parameters
@@ -24,6 +23,7 @@ class FollowMe:
 
         # CV Bridge
         self.bridge = CvBridge()
+
         # Image buffers
         self.input_camera = [None, None]
         self.new_frame = [False, False]
@@ -61,7 +61,6 @@ class FollowMe:
     def _image_cb(self, msg, idx):
         try:
             img = self.bridge.compressed_imgmsg_to_cv2(msg, 'bgr8')
-            # Convert BGR to RGB for processing
             frame = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
             h, w, _ = frame.shape
             self.frame_height, self.frame_width = h, w
@@ -78,7 +77,6 @@ class FollowMe:
     def _detect_ball(self, frame):
         # Convert to grayscale
         gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
-        # Hough Circle detection
         circles = cv2.HoughCircles(
             gray, cv2.HOUGH_GRADIENT,
             dp=1, minDist=40,
@@ -96,10 +94,16 @@ class FollowMe:
         r_norm = r / self.frame_width
         return [x_norm, r_norm]
 
+    def drive(self, linear=0.0, angular=0.0):
+        """Publish drive command to move MiRo"""
+        cmd = TwistStamped()
+        cmd.twist.linear.x = linear
+        cmd.twist.angular.z = angular
+        self.cmd_pub.publish(cmd)
+
     def run(self):
         rospy.loginfo('[follow_me] Node running - searching for target')
         while not rospy.is_shutdown():
-            # Vision detection every cam_freq ticks
             if self.tick_counter % self.cam_freq == 0:
                 self.circles = []
                 for idx in range(2):
