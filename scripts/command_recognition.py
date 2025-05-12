@@ -27,6 +27,8 @@ class CommandRecognition:
         print(f"🗣️ Heard: {self.command}")
         if "miro" in self.command or "myra" in self.command or "mero" in self.command:
             self.activate = True
+            self.pub_kinematic.publish([0.0, 0.0, 0.0, 0.0])
+            self.pub_cosmetic.publish([0.0, 0.0, 0.0, 0.0, 0.0,0.0])
             if self.activate:
                 if "play dead" in self.command or "play dad" in self.command:
                     self.pub_control.publish("play dead")
@@ -54,8 +56,6 @@ class CommandRecognition:
     def switching_commands(self):
         r = rospy.Rate(self.rate)
         while not rospy.is_shutdown():
-            self.pub_kinematic.publish([0.0, 0.0, 0.0, 0.0])
-            self.pub_cosmetic.publish([0.0, 0.0, 0.0, 0.0, 0.0,0.0])
             r.sleep()
 
 
