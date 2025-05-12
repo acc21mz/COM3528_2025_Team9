@@ -33,8 +33,6 @@ class CommandRecognition:
         print(f"🗣️ Heard: {self.command}")
         if "miro" in self.command or "myra" in self.command or "mero" in self.command:
             self.activate = True
-            self.pub_kinematic.publish(self.kin_joints)
-            self.pub_cosmetic.publish(self.cos_joints)
             if self.activate:
                 if "play dead" in self.command or "play dad" in self.command:
                     self.pub_control.publish("play dead")

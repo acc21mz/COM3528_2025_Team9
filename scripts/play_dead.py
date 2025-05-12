@@ -39,6 +39,11 @@ class PlayDead():
             self.cos_joints.data = [0.0, 0.0, 1.0, 1.0, -0.5, -0.5]
             self.pub_kinematic.publish(self.kin_joints)
             self.pub_cosmetic.publish(self.cos_joints)
+            rospy.sleep(5)
+            self.kin_joints.position = [0.0, radians(0.0), 0.0, 0.0]
+            self.cos_joints.data = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+            self.pub_kinematic.publish(self.kin_joints)
+            self.pub_cosmetic.publish(self.cos_joints)
         except KeyboardInterrupt:
             print("KeyboardInterrupt: Stopping the play dead action.")                
         r.sleep()
