@@ -67,6 +67,7 @@ class Fetch():
         self.kin_joints.name = ["tilt", "lift", "yaw", "pitch"]
         self.kin_joints.position = [0.0, radians(40.0), 0.0, 0.0]
         t = 0
+        rospy.sleep(0.5)
         while not rospy.core.is_shutdown():  # Check ROS is running
             # Publish state to neck servos for 1 sec
             self.pub_kin.publish(self.kin_joints)
