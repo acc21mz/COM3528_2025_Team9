@@ -42,13 +42,13 @@ class Speak():
     
 
         # # convert to numpy array
-        dat = np.frombuffer(dat, dtype='int16').astype(np.int32)
+        dat = np.frombuffer(dat, dtype='int16')
 
         # normalise wav
-        dat = dat.astype(np.float)
-        sc = 32767.0 / np.max(np.abs(dat))
-        dat *= sc
-        dat = dat.astype(np.int16).tolist()
+        # dat = dat.astype(np.float)
+        # sc = 32767.0 / np.max(np.abs(dat))
+        # dat *= sc
+        # dat = dat.astype(np.int16).tolist()
         self.data = dat
 
         # robot name
@@ -86,7 +86,7 @@ class Speak():
         chunk_size = 1024
         for i in range(0, len(self.data), chunk_size):
             msg = Int16MultiArray()
-            msg.data = self.data[i:i+chunk_size]
+            msg.data = self.data[i:i+chunk_size].tolist()
             self.pub_stream.publish(msg)
             rospy.sleep(0.01)
 
