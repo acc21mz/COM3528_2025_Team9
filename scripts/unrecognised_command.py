@@ -41,6 +41,6 @@ class UnrecognisedCommand:
         rospy.sleep(2)
 
 if __name__ == '__main__':
-    rospy.init_node('unrecognised_command')
+    rospy.init_node('miro_unrecognised_command')
     unrecognised = UnrecognisedCommand()
     rospy.spin()
