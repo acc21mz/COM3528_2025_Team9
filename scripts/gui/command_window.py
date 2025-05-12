@@ -9,10 +9,8 @@ class CommandWindow:
         self.root = tk.Tk()
         self.root.title("MiRo Command Interface")
         
-        # Initialize ROS node and publisher
-        
         rospy.init_node('command_gui', anonymous=True)
-        self.robot_name = rospy.get_param ( '/robot_name', 'sim01')
+        self.robot_name = rospy.get_param ( '/robot_name', 'dia-miro12')
         self.topic_root = "/miro/" + self.robot_name
         self.pub = rospy.Publisher(self.topic_root + '/speech_to_text', String, queue_size=1)
     
@@ -45,7 +43,7 @@ class CommandWindow:
     
     def send_command(self, command):
         msg = String()
-        msg.data = command
+        msg.data = command.lower()
         self.pub.publish(msg)
         print(f"Sent command: {command}")
     

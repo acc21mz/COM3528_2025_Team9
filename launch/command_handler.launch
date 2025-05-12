@@ -27,7 +27,7 @@
 <node pkg="cogbiogroup9" type="speech_to_text_node.py" name="speech_to_text_node" output="screen"/>
 
 <!-- ACTIONS: WE NEED TO IMPLEMENT THIS --> 
-<include file="$(find actions)/launch/actions.launch" />
+<include file="launch/actions.launch" />
 <!-- <include file="$(find actions)/launch/double_hough_circles.launch" />
 <include file="$(find actions)/launch/double_hsv_color_filter.launch" /> -->
 
