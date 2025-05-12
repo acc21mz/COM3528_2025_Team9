@@ -8,13 +8,14 @@
 
 <!-- BALL COLOR -->
 
-<arg name="h_limit_max" default="127" doc="The maximum allowed field value Hue" />
-<arg name="h_limit_min" default="110" doc="The minimum allowed field value Hue" />
+<arg name="h_limit_max" default="35" doc="The maximum allowed field value Hue" />
+<arg name="h_limit_min" default="25" doc="The minimum allowed field value Hue" />
 
-<arg name="s_limit_max" default="227" doc="The maximum allowed field value Saturation" />
-<arg name="s_limit_min" default="150" doc="The minimum allowed field value Saturation" />
-<arg name="v_limit_max" default="209" doc="The maximum allowed field value Value" />
-<arg name="v_limit_min" default="150" doc="The minimum allowed field value Value" />
+<arg name="s_limit_max" default="255" doc="The maximum allowed field value Saturation" />
+<arg name="s_limit_min" default="180" doc="The minimum allowed field value Saturation" />
+
+<arg name="v_limit_max" default="255" doc="The maximum allowed field value Value" />
+<arg name="v_limit_min" default="180" doc="The minimum allowed field value Value" />
 <!-- HANDLING COMMANDS -->
 
 <!-- <node name="command_activation" pkg="command_handler" type="command_activation.py" /> -->
