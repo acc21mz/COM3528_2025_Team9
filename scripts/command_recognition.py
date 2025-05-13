@@ -36,9 +36,9 @@ class CommandRecognition:
                 elif "fetch" in self.command:
                     self.pub_control.publish("fetch")
                     print("fetch")
-                elif "follow me" in self.command:
-                    self.pub_control.publish("follow me")
-                    print("follow me")
+                # elif "follow me" in self.command:
+                #     self.pub_control.publish("follow me")
+                #     print("follow me")
                 elif "speak" in self.command:
                     self.pub_control.publish("speak")
                     print("speak")
