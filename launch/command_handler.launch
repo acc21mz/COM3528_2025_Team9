@@ -20,13 +20,13 @@
 <!-- HANDLING COMMANDS -->
 
 <!-- <node name="command_activation" pkg="command_handler" type="command_activation.py" /> -->
-<node pkg="cogbiogroup9" type="command_recognition.py" name="command_recognition" output="screen">
+<node pkg="com3528_2025_team9" type="command_recognition.py" name="command_recognition" output="screen">
     <param name="rosconsole" value="debug"/>
 </node>
 
 <!-- SPEECH RECOGNITION -->
 
-<node pkg="cogbiogroup9" type="speech_to_text_node.py" name="speech_to_text_node" output="screen"/>
+<node pkg="com3528_2025_team9" type="speech_to_text_node.py" name="speech_to_text_node" output="screen"/>
 
 <!-- ACTIONS: WE NEED TO IMPLEMENT THIS --> 
 <include file="launch/actions.launch" />

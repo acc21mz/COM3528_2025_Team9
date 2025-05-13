@@ -4,11 +4,11 @@
 
 <param name = "rate" value="200" />
 
-<node name="miro_unrecognised_command" pkg="cogbiogroup9" type="unrecognised_command.py"/>
-<node name="miro_play_dead" pkg="cogbiogroup9" type="play_dead.py"/>
-<node name="miro_stop" pkg="cogbiogroup9" type="emergency_stop.py"/>
-<node name="miro_fetch" pkg="cogbiogroup9" type="fetch.py"/>
-<node name="miro_follow_me" pkg="cogbiogroup9" type="follow_me.py"/>
-<node name="miro_speak" pkg="cogbiogroup9" type="speak.py"/>
+<node name="miro_unrecognised_command" pkg="com3528_2025_team9" type="unrecognised_command.py"/>
+<node name="miro_play_dead" pkg="com3528_2025_team9" type="play_dead.py"/>
+<node name="miro_stop" pkg="com3528_2025_team9" type="emergency_stop.py"/>
+<node name="miro_fetch" pkg="com3528_2025_team9" type="fetch.py"/>
+<node name="miro_follow_me" pkg="com3528_2025_team9" type="follow_me.py"/>
+<node name="miro_speak" pkg="com3528_2025_team9" type="speak.py"/>
 
 </launch>

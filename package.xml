@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>cogbiogroup9</name>
+  <name>com3528_2025_team9</name>
   <version>0.0.0</version>
-  <description>The cogbiogroup9 package</description>
+  <description>The com3528_2025_team9 package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
@@ -19,7 +19,7 @@
   <!-- Url tags are optional, but multiple are allowed, one per tag -->
   <!-- Optional attribute type can be: website, bugtracker, or repository -->
   <!-- Example: -->
-  <!-- <url type="website">http://wiki.ros.org/cogbiogroup9</url> -->
+  <!-- <url type="website">http://wiki.ros.org/com3528_2025_team9</url> -->
 
 
   <!-- Author tags are optional, multiple are allowed, one per tag -->
