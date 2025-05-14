@@ -17,4 +17,6 @@ Speech to text package: install and instructions can be found here: https://gith
 
 Dog sound effect: https://pixabay.com/sound-effects/small-dog-barking-84707/
 
+Beep sound effect: https://pixabay.com/sound-effects/beep-warning-6387/
+
 Licence information for SFX: https://pixabay.com/service/license-summary/
