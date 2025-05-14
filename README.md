@@ -9,9 +9,6 @@ Pip install SpeechRecognition
 
 Pip install pyaudio
 
-<<<<<<< HEAD
-Speech to text package: install and instructions can be found here: https://github.com/EmaroLab/ros_verbal_interaction_node
-=======
 Sudo apt install python3-pyaudio
 
 ***
@@ -20,4 +17,3 @@ Speech to text package: install and instructions can be found here: https://gith
 
 Dog sound effect: https://pixabay.com/sound-effects/small-dog-barking-84707/
 Licence information for SFX: https://pixabay.com/service/license-summary/
->>>>>>> 30955af (readme again)
